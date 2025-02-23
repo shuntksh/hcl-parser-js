@@ -1,0 +1,26 @@
+{
+  "name": "hcl-js-parser",
+  "version": "0.0.1",
+  "description": "A pure JavaScript HCL parser implementation",
+  "main": "dist/index.js",
+  "author": "Shun Takahashi",
+  "license": "MIT",
+  "packageManager": "bun@1.2.2",
+  "scripts": {
+    "generate": "peggy -c peggy.config.cjs",
+    "prebuild": "npm run generate",
+    "build": "bun build ./src/index.ts --outdir ./dist --minify",
+    "test": "bun test"
+  },
+  "optionalDependencies": {
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/bun": "1.2.2",
+    "peggy": "4.2.0",
+    "tsup": "8.3.6",
+    "typescript": "5.7.3",
+    "zod": "3.24.2"
+  }
+}
