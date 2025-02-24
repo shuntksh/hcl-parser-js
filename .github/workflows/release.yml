@@ -64,6 +64,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}  # From create_release step
-          asset_path: ${{ github.workspace }}/dist
+          asset_path: .
           asset_name: hcl-parser-js-${{ github.ref_name }}.zip
           asset_content_type: application/zip
