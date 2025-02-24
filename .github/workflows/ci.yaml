@@ -1,5 +1,5 @@
 # Main integration workflow to build the web app, run tests, and deploy the artifact
-name: On Push/PR - Build Website
+name: CI
 
 on:
   push:
@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  website:
+  build:
     runs-on: ubuntu-latest
     steps:
       #
