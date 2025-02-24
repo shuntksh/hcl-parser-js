@@ -4,7 +4,9 @@ import { schema } from "./schema";
 
 describe("Smoke", () => {
 	test("parses a test tf file", async () => {
-		const template = await Bun.file(new URL("./grammar.test.tf", import.meta.url)).text();
+		const template = await Bun.file(
+			new URL("./grammar.test.tf", import.meta.url),
+		).text();
 		const parsed = parse(template);
 		expect(parsed).toBeObject();
 		expect(parsed).toMatchSnapshot();

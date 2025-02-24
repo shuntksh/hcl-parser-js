@@ -11,7 +11,9 @@ type SchemaTypeOf<T> = z.ZodType<T>;
  * const ast = parse(template);
  * const result = schema.parse(ast);
  */
-export const schema = z.lazy(() => z.array(bodySchema)) satisfies SchemaTypeOf<Types.ConfigFile>;
+export const schema = z.lazy(() =>
+	z.array(bodySchema),
+) satisfies SchemaTypeOf<Types.ConfigFile>;
 
 export const expressionSchema: z.ZodType<Types.Expression> = z.lazy(() =>
 	z.union([
@@ -34,7 +36,9 @@ export const identifierSchema = z.object({
 	value: z.string(),
 }) satisfies SchemaTypeOf<Types.Identifier>;
 
-export const labelSchema = z.lazy(() => z.union([identifierSchema, stringLiteralSchema]));
+export const labelSchema = z.lazy(() =>
+	z.union([identifierSchema, stringLiteralSchema]),
+);
 
 export const attributeSchema = z.object({
 	type: z.literal(NodeTypes.Attribute),
@@ -82,7 +86,11 @@ export const nullLiteralSchema = z.object({
 	value: z.null(),
 }) satisfies SchemaTypeOf<Types.NullLiteral>;
 
-export const literalValueSchema = z.union([numberLiteralSchema, booleanLiteralSchema, nullLiteralSchema]);
+export const literalValueSchema = z.union([
+	numberLiteralSchema,
+	booleanLiteralSchema,
+	nullLiteralSchema,
+]);
 
 export const tupleValueSchema = z.object({
 	type: z.literal(NodeTypes.TupleValue),
@@ -99,7 +107,10 @@ export const objectValueSchema = z.object({
 	elements: z.array(objectValueElementSchema),
 }) satisfies SchemaTypeOf<Types.ObjectValue>;
 
-export const collectionValueSchema = z.union([tupleValueSchema, objectValueSchema]);
+export const collectionValueSchema = z.union([
+	tupleValueSchema,
+	objectValueSchema,
+]);
 
 export const quotedTemplateContentSchema = z.lazy(() =>
 	z.union([
@@ -132,7 +143,11 @@ export const templateInterpolationSchema = z.object({
 }) satisfies SchemaTypeOf<Types.TemplateInterpolation>;
 
 export const templateSchema: z.ZodType<Types.Template> = z.lazy(() =>
-	z.union([templateLiteralSchema, templateInterpolationSchema, templateDirectiveSchema]),
+	z.union([
+		templateLiteralSchema,
+		templateInterpolationSchema,
+		templateDirectiveSchema,
+	]),
 );
 
 export const templateIfSchema: z.ZodType<Types.TemplateIf> = z.object({
@@ -160,7 +175,10 @@ export const templateForSchema = z.object({
 	}),
 }) satisfies SchemaTypeOf<Types.TemplateFor>;
 
-export const templateDirectiveSchema = z.union([templateIfSchema, templateForSchema]);
+export const templateDirectiveSchema = z.union([
+	templateIfSchema,
+	templateForSchema,
+]);
 
 export const heredocTemplateExpressionSchema = z.object({
 	type: z.literal(NodeTypes.HeredocTemplateExpression),
@@ -247,11 +265,16 @@ export const attrSplatOperatorSchema = z.object({
 export const fullSplatOperatorSchema = z.object({
 	type: z.literal(NodeTypes.SplatOperator),
 	kind: z.literal(SplatKinds.Full),
-	operations: z.array(z.union([splatGetAttributeOperatorSchema, indexOperatorSchema])),
+	operations: z.array(
+		z.union([splatGetAttributeOperatorSchema, indexOperatorSchema]),
+	),
 	target: expressionSchema,
 }) satisfies SchemaTypeOf<Types.FullSplatOperator>;
 
-export const splatOperatorSchema = z.union([attrSplatOperatorSchema, fullSplatOperatorSchema]);
+export const splatOperatorSchema = z.union([
+	attrSplatOperatorSchema,
+	fullSplatOperatorSchema,
+]);
 
 export const conditionalOperatorSchema = z.object({
 	type: z.literal(NodeTypes.ConditionalOperator),
@@ -262,20 +285,30 @@ export const conditionalOperatorSchema = z.object({
 
 export const unaryOperatorSchema = z.object({
 	type: z.literal(NodeTypes.UnaryOperator),
-	operator: z.union([z.literal(OperatorTypes.Exclamation), z.literal(OperatorTypes.Minus)]),
+	operator: z.union([
+		z.literal(OperatorTypes.Exclamation),
+		z.literal(OperatorTypes.Minus),
+	]),
 	term: expressionSchema,
 }) satisfies SchemaTypeOf<Types.UnaryOperator>;
 
 export const multiplicativeOperatorSchema = z.object({
 	type: z.literal(NodeTypes.BinaryOperator),
-	operator: z.union([z.literal(OperatorTypes.Star), z.literal(OperatorTypes.Slash), z.literal(OperatorTypes.Percent)]),
+	operator: z.union([
+		z.literal(OperatorTypes.Star),
+		z.literal(OperatorTypes.Slash),
+		z.literal(OperatorTypes.Percent),
+	]),
 	left: expressionSchema,
 	right: expressionSchema,
 }) satisfies SchemaTypeOf<Types.MultiplicativeOperator>;
 
 export const additiveOperatorSchema = z.object({
 	type: z.literal(NodeTypes.BinaryOperator),
-	operator: z.union([z.literal(OperatorTypes.Plus), z.literal(OperatorTypes.Minus)]),
+	operator: z.union([
+		z.literal(OperatorTypes.Plus),
+		z.literal(OperatorTypes.Minus),
+	]),
 	left: expressionSchema,
 	right: expressionSchema,
 }) satisfies SchemaTypeOf<Types.AdditiveOperator>;
@@ -295,14 +328,20 @@ export const comparisonOperatorSchema = z.object({
 
 export const equalityOperatorSchema = z.object({
 	type: z.literal(NodeTypes.BinaryOperator),
-	operator: z.union([z.literal(OperatorTypes.Equal), z.literal(OperatorTypes.NotEqual)]),
+	operator: z.union([
+		z.literal(OperatorTypes.Equal),
+		z.literal(OperatorTypes.NotEqual),
+	]),
 	left: expressionSchema,
 	right: expressionSchema,
 }) satisfies SchemaTypeOf<Types.EqualityOperator>;
 
 export const logicalOperatorSchema = z.object({
 	type: z.literal(NodeTypes.BinaryOperator),
-	operator: z.union([z.literal(OperatorTypes.And), z.literal(OperatorTypes.Or)]),
+	operator: z.union([
+		z.literal(OperatorTypes.And),
+		z.literal(OperatorTypes.Or),
+	]),
 	left: expressionSchema,
 	right: expressionSchema,
 }) satisfies SchemaTypeOf<Types.LogicalOperator>;

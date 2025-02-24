@@ -6,8 +6,11 @@
 		"useIgnoreFile": false
 	},
 	"files": {
-		"ignoreUnknown": false,
-		"ignore": []
+		"ignoreUnknown": true,
+		"ignore": [
+			"dist",
+			"./src/__generated.*"
+		]
 	},
 	"formatter": {
 		"enabled": true,
@@ -19,7 +22,10 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"suspicious": {
+				"noThenProperty": "off"
+			}
 		}
 	},
 	"javascript": {

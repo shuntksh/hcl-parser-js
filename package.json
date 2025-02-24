@@ -1,26 +1,47 @@
 {
-  "name": "hcl-js-parser",
-  "version": "0.0.1",
-  "description": "A pure JavaScript HCL parser implementation",
-  "main": "dist/index.js",
-  "author": "Shun Takahashi",
-  "license": "MIT",
-  "packageManager": "bun@1.2.2",
-  "scripts": {
-    "generate": "peggy -c peggy.config.cjs --test-file src/grammar.test.tf > /dev/null",
-    "prebuild": "npm run generate",
-    "build": "bun build ./src/index.ts --outdir ./dist --minify",
-    "test": "bun test"
-  },
-  "optionalDependencies": {
-    "zod": "^3"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.2.2",
-    "peggy": "4.2.0",
-    "tsup": "8.3.6",
-    "typescript": "5.7.3",
-    "zod": "3.24.2"
-  }
+	"name": "hcl-parser-js",
+	"version": "0.0.1",
+	"description": "A pure JavaScript HCL parser implementation",
+	"author": "Shun Takahashi",
+	"license": "MIT",
+	"packageManager": "bun@1.2.2",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js"
+		},
+		"./schema": {
+			"types": "./dist/schema.d.ts",
+			"import": "./dist/schema.mjs",
+			"require": "./dist/schema.js"
+		},
+		"./types": "./src/types.ts"
+	},
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"src/types.ts"
+	],
+	"scripts": {
+		"generate": "peggy -c peggy.config.cjs --test-file src/grammar.test.tf > /dev/null",
+		"prebuild": "bun run generate",
+		"build": "tsup --entry.index src/index.ts --entry.schema src/schema.ts --format esm,cjs --dts --minify",
+		"lint": "biome check ./src",
+		"format": "biome check --write ./src",
+		"test": "bun test",
+		"prepublishOnly": "bun run build"
+	},
+	"optionalDependencies": {
+		"zod": "^3"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/bun": "1.2.2",
+		"peggy": "4.2.0",
+		"tsup": "^8.3.6",
+		"typescript": "5.7.3",
+		"zod": "3.24.2"
+	}
 }

@@ -127,7 +127,9 @@ export type ObjectValueElement = {
 	value: Expression;
 };
 
-export type TemplateExpression = QuotedTemplateExpression | HeredocTemplateExpression;
+export type TemplateExpression =
+	| QuotedTemplateExpression
+	| HeredocTemplateExpression;
 
 export type QuotedTemplateExpression = {
 	type: typeof NodeTypes.QuotedTemplateExpression;
@@ -149,7 +151,10 @@ export type HeredocTemplateExpression = {
 	template: Template[];
 };
 
-export type Template = TemplateLiteral | TemplateInterpolation | TemplateDirective;
+export type Template =
+	| TemplateLiteral
+	| TemplateInterpolation
+	| TemplateDirective;
 
 export type TemplateLiteral = {
 	type: typeof NodeTypes.TemplateLiteral;
@@ -320,7 +325,10 @@ export type BinaryOperator =
 
 export type MultiplicativeOperator = {
 	type: typeof NodeTypes.BinaryOperator;
-	operator: typeof OperatorTypes.Star | typeof OperatorTypes.Slash | typeof OperatorTypes.Percent;
+	operator:
+		| typeof OperatorTypes.Star
+		| typeof OperatorTypes.Slash
+		| typeof OperatorTypes.Percent;
 	left: Expression;
 	right: Expression;
 };

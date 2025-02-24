@@ -1,0 +1,13 @@
+{
+	"name": "test",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@types/bun": "latest",
+		"hcl-parser-js": "link:hcl-parser-js"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	}
+}
