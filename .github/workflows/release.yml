@@ -1,5 +1,8 @@
 name: Create Release
 
+permissions:
+  contents: write  # Allows creating releases and uploading assets
+
 # Trigger only when a tag is pushed
 on:
   push:
