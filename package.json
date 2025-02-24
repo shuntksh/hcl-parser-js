@@ -16,18 +16,18 @@
 			"import": "./dist/schema.mjs",
 			"require": "./dist/schema.js"
 		},
-		"./types": "./src/types.ts"
+		"./types": "./dist/types.ts"
 	},
 	"files": [
 		"dist",
 		"package.json",
-		"LICENSE",
-		"src/types.ts"
+		"LICENSE"
 	],
 	"scripts": {
 		"generate": "peggy -c peggy.config.cjs --test-file src/grammar.test.tf > /dev/null",
 		"prebuild": "bun run generate",
 		"build": "tsup --entry.index src/index.ts --entry.schema src/schema.ts --format esm,cjs --dts --minify",
+		"postbuild": "cp src/types.ts dist",
 		"lint": "biome check ./src",
 		"format": "biome check --write ./src",
 		"test": "bun test",
