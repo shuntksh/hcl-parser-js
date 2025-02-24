@@ -48,14 +48,3 @@ jobs:
 
       - name: Run tests
         run: bun run test
-
-      #
-      # Upload the build output as an artifact --------------------------------
-      #
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hcl-parser-js-build
-          path: ${{ github.workspace }}/dist
-          retention-days: 7
