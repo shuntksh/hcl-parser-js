@@ -1,268 +1,132 @@
 import { describe, expect, test } from "bun:test";
 import { parse } from "./parser";
-import type { ConfigFile } from "./types";
+import { schema } from "./schema";
+
+const parseAndValidate = (block: string) => {
+	const ast = parse(block);
+	const parsed = schema.parse(ast);
+	expect(parsed).toEqual(ast);
+};
+
 describe("zod schema", () => {
-	test("should parse an empty block", () => {
+	test("one line block", () => {
+		const block = `
+		resource "aws_instance" "web" { attr = "value" }
+		`;
+		parseAndValidate(block);
+	});
+
+	test("empty block", () => {
 		const block = `
 		resource "aws_instance" "web" {
 		}
 		`;
-		const parsed = parse(block);
-		expect(parsed).toEqual([
-			{
-				blockType: { type: "Identifier", value: "resource" },
-				type: "Block",
-				labels: [
-					{ type: "StringLiteral", value: "aws_instance" },
-					{ type: "StringLiteral", value: "web" },
-				],
-				bodies: [],
-			},
-		]);
+		parseAndValidate(block);
 	});
 
-	describe("template", () => {
-		test("should parse a quoted template", () => {
-			const block = `
+	test("quoted template", () => {
+		const block = `
 		attr = "hello"
 		`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "QuotedTemplateExpression",
-						parts: [{ type: "TemplateLiteral", value: "hello" }],
-					},
-				},
-			]);
-		});
+		parseAndValidate(block);
+	});
 
-		test("should parse a heredoc template", () => {
-			const block = `
+	test("heredoc template", () => {
+		const block = `
 		attr = <<EOF
 		hello
 		EOF
 		`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "HeredocTemplateExpression",
-						marker: { type: "Identifier", value: "EOF" },
-						stripIndent: false,
-						template: [{ type: "TemplateLiteral", value: "\t\thello" }],
-					},
-				},
-			]);
-		});
+		parseAndValidate(block);
 	});
 
-	describe("collection", () => {
-		test("should parse a tuple", () => {
-			const block = `
+	test("tuple", () => {
+		const block = `
 		attr = [1, 2, 3]
 		`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "TupleValue",
-						elements: [
-							{ type: "NumberLiteral", value: 1 },
-							{ type: "NumberLiteral", value: 2 },
-							{ type: "NumberLiteral", value: 3 },
-						],
-					},
-				},
-			]);
-		});
+		parseAndValidate(block);
+	});
 
-		test("should parse an object", () => {
-			const block = `
+	test("object", () => {
+		const block = `
 		attr = { a = 1, b = 2, c = 3 }
 		`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "ObjectValue",
-						elements: [
-							{ key: { type: "Identifier", value: "a" }, value: { type: "NumberLiteral", value: 1 } },
-							{ key: { type: "Identifier", value: "b" }, value: { type: "NumberLiteral", value: 2 } },
-							{ key: { type: "Identifier", value: "c" }, value: { type: "NumberLiteral", value: 3 } },
-						],
-					},
-				},
-			]);
-		});
+		parseAndValidate(block);
 	});
 
-	describe("literals", () => {
-		test("should parse boolean true", () => {
-			const block = `
-			attr = true
-			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: { type: "BooleanLiteral", value: true },
-				},
-			]);
-		});
+	test("boolean true", () => {
+		const block = `
+		attr = true
+		`;
+		parseAndValidate(block);
+	});
 
-		test("should parse boolean false", () => {
-			const block = `
+	test("boolean false", () => {
+		const block = `
 			attr = false
-			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: { type: "BooleanLiteral", value: false },
-				},
-			]);
-		});
-
-		test("should parse null", () => {
-			const block = `
-			attr = null
-			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: { type: "NullLiteral", value: null },
-				},
-			]);
-		});
+		`;
+		parseAndValidate(block);
 	});
 
-	describe("nested blocks", () => {
-		test("should parse nested block", () => {
-			const block = `
+	test("null", () => {
+		const block = `
+			attr = null
+		`;
+		parseAndValidate(block);
+	});
+
+	test("nested block", () => {
+		const block = `
 			resource "aws_instance" "web" {
 				network_interface {
 					network_id = "net-123"
 				}
 			}
 			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Block",
-					blockType: { type: "Identifier", value: "resource" },
-					labels: [
-						{ type: "StringLiteral", value: "aws_instance" },
-						{ type: "StringLiteral", value: "web" },
-					],
-					bodies: [
-						{
-							type: "Block",
-							blockType: { type: "Identifier", value: "network_interface" },
-							labels: [],
-							bodies: [
-								{
-									type: "Attribute",
-									name: { type: "Identifier", value: "network_id" },
-									value: {
-										type: "QuotedTemplateExpression",
-										parts: [{ type: "TemplateLiteral", value: "net-123" }],
-									},
-								},
-							],
-						},
-					],
-				},
-			]);
-		});
+		parseAndValidate(block);
 	});
 
-	describe("expressions", () => {
-		test.skip("should parse binary operation", () => {
-			const block = `
+	test("function call", () => {
+		const block = `
+			attr = call(a,b,c)
+			attr2 = call()
+			`;
+		parseAndValidate(block);
+	});
+
+	test("expression", () => {
+		const block = `
+			attr = 1
+			`;
+		parseAndValidate(block);
+	});
+
+	test("multiple expressions", () => {
+		const block = `
+			attr = 1
+			attr2 = [1,2,3]
+			`;
+		parseAndValidate(block);
+	});
+
+	test("binary operation", () => {
+		const block = `
 			attr = 1 + 2
 			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "BinaryOperator",
-						operator: "+",
-						left: { type: "NumberLiteral", value: 1 },
-						right: { type: "NumberLiteral", value: 2 },
-					},
-				},
-			]);
-		});
-
-		test.skip("should parse conditional expression", () => {
-			const block = `
-			attr = true ? "yes" : "no"
-			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "ConditionalOperator",
-						predicate: { type: "BooleanLiteral", value: true },
-						trueExpr: {
-							type: "QuotedTemplateExpression",
-							parts: [{ type: "TemplateLiteral", value: "yes" }],
-						},
-						falseExpr: {
-							type: "QuotedTemplateExpression",
-							parts: [{ type: "TemplateLiteral", value: "no" }],
-						},
-					},
-				},
-			]);
-		});
+		parseAndValidate(block);
 	});
 
-	describe("interpolation", () => {
-		test("should parse string interpolation", () => {
-			const block = `
+	test("conditional expression", () => {
+		const block = `
+			attr = true ? "yes" : "no"
+			`;
+		parseAndValidate(block);
+	});
+
+	test("string interpolation", () => {
+		const block = `
 			attr = "Hello, \${var.name}!"
 			`;
-			const parsed = parse(block);
-			expect(parsed).toEqual([
-				{
-					type: "Attribute",
-					name: { type: "Identifier", value: "attr" },
-					value: {
-						type: "QuotedTemplateExpression",
-						parts: [
-							{ type: "TemplateLiteral", value: "Hello, " },
-							{
-								type: "TemplateInterpolation",
-								expr: {
-									type: "GetAttributeOperator",
-									target: { type: "VariableExpression", name: { type: "Identifier", value: "var" } },
-									name: { type: "Identifier", value: "name" },
-								},
-								strip: { left: false, right: false },
-							},
-							{ type: "TemplateLiteral", value: "!" },
-						],
-					},
-				},
-			] satisfies ConfigFile);
-		});
+		parseAndValidate(block);
 	});
 });

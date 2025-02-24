@@ -93,14 +93,8 @@ ConfigFile
  * Body consists of a sequence of attributes and blocks
  */
 Bodies
-  = __ items:(
-			// Body can be surrounded by empty lines
-			__ item:BodyElement __ {
-				return item
-			})*
-			{
-				return items
-			}
+  = __ items:(__ item:BodyElement __ { return item })*
+	{ return items }
 
 BodyElement
   = Attribute
@@ -109,58 +103,97 @@ BodyElement
 
 /**
  * Attribute assigns a value to a name
+ * Attribute = Identifier "=" Expression
  */
 Attribute
-  = _ name:Identifier 
-	  _ "="
-		_ value:Expression 
-		_ terminator:(NewLine / __eof) {
-      return {
-        type: NodeTypes.Attribute,
-        name: name,
-        value: value
-      }
-    }
+  = _ name:Identifier _ "=" _ value:Expression _ _terminator
+	{	return { type: NodeTypes.Attribute, name: name, value: value } }
+
+/**
+ * OneLineBlock is a simplified block format for single attributes
+ * OneLineBlock = Identifier labels { attribute }
+ */
+OneLineBlock
+  = _ blockType:Identifier _ labels:(_labels)* _ "{" _ attr:(Identifier _ "=" _ Expression)? _ "}" _ _terminator
+	{
+		const attribute = attr ? { type: NodeTypes.Attribute, name: attr[0], value: attr[4] } : null
+		return { type: NodeTypes.OneLineBlock, blockType, labels, attribute }
+	}
+
 
 /**
  * Block creates a child body with type and optional labels
+ * Block = Identifier labels { \n bodies \n }
  */
 Block
-  = _ type:Identifier 
-		_ labels:(_ (StringLit / Identifier))* 
+  = _ blockType:Identifier 
+		_ labels:(_labels)* 
     _ "{" 
 		_ NewLine
     _ bodies:Bodies?
     _ "}"
-		_ terminator:(NewLine / __eof) 
-		{
-      return {
-        type: NodeTypes.Block,
-        blockType: type,
-				// TODO: Hack. Taking the second element as the label as " " matches too
-        labels: labels.map(l => l[1]),
-        bodies: bodies
-      }
-    }
+		_ _terminator
+	{ return { type: NodeTypes.Block, blockType, labels, bodies } }
 
-/**
- * OneLineBlock is a simplified block format for single attributes
- */
-OneLineBlock
-  = _ type:Identifier
-		_ labels:(_ (StringLit / Identifier))*
-    _ "{"
-    _ (name:Identifier _ "=" _ value:Expression)?
-    _ "}"
-		_ terminator:(NewLine / __eof) {
-      return {
-        type: NodeTypes.OneLineBlock,
-        blockType: type,
-				// TODO: Hack. Taking the second element as the label as " " matches too
-        labels: labels.map(l => l[1]),
-        body: attr
-      }
-    }
+_labels = _ label:(StringLit / Identifier) { return label }
+_terminator = NewLine / __eof
+
+//
+// Expression Sub-languages -----------------------------------------------------
+//
+
+// #1 Top-level expression starts with the lowest precedence (conditional)
+Expression
+  = head:BinaryOp tail:(_ "?" _ Expression _ ":" _ Expression)?
+    { return tail ? { type: NodeTypes.ConditionalOperator, predicate: head, trueExpr: tail[3], falseExpr: tail[7]} : head }
+  / UnaryOp
+  / _expr_term
+
+// #2 Unary/Binary Operators
+UnaryOp
+  = _ operator:("-" / "!") _ term:_expr_term 
+    { return { type: NodeTypes.UnaryOperator, operator, term } }
+
+BinaryOp
+  = LogicalOrOp // to cascade binary operators based on precedence
+
+LogicalOrOp // Level 1
+  = left:LogicalAndOp right:(_ "||" _ Expression)?
+    { return right ? { type: NodeTypes.BinaryOperator, operator: "||", left, right: right[3] } : left }
+
+LogicalAndOp // Level 2
+  = left:EqualityOp right:(_ "&&" _ Expression)?
+    { return right ? { type: NodeTypes.BinaryOperator, operator: "&&", left, right: right[3] } : left }
+
+EqualityOp // Level 3
+  = left:ComparisonOp right:(_ operator:("==" / "!=") _ Expression)?
+    { return right ? { type: NodeTypes.BinaryOperator, operator: right[1], left, right: right[3] } : left }
+
+ComparisonOp // Level 4
+  = left:AdditiveOp right:(_ operator:(">=" / "<=" / ">" / "<") _ Expression)?
+    { return right ? { type: NodeTypes.BinaryOperator, operator: right[1], left, right: right[3] } : left }
+
+AdditiveOp // Level 5
+  = left:MultiplicativeOp right:(_ operator:("+" / "-") _ Expression)?
+    { return right ? { type: NodeTypes.BinaryOperator, operator: right[1], left, right: right[3] } : left }
+
+MultiplicativeOp // Level 6
+  = left:_expr_term right:(_ operator:("*" / "/" / "%") _ Expression)?
+    { return right ? { type: NodeTypes.BinaryOperator, operator: right[1], left, right: right[3] } : left }
+
+// #3 Expression Terms handles the lowest precedence expressions
+_expr_term
+  = head:(
+        TemplateExpr
+      / LiteralValue
+      / FunctionCall
+      / CollectionValue
+      / VariableExpr
+      / ForExpr
+      / "(" _ target:Expression _ ")" { return target }
+      )
+    tail:(Index / GetAttr / Splat)* 
+    { return tail.reduce((target, op) => ({ ...op, target }), head) }
 
 //
 // Lexical Elements ------------------------------------------------------------
@@ -218,46 +251,17 @@ NumericLit "number"
 _decimal = [0-9]
 _expmark = [eE] [+-]?
 
+//
+// Literal Expressions ---------------------------------------------------------
+//
+
 /**
  * StringLit represents a quoted string literal with escape sequences.
  * Does not allow raw newlines, only escaped ones (\n).
  */
 StringLit
-  = '"' chars:_char* '"' { 
-      return {type: NodeTypes.StringLiteral, value: chars.join('')}
-    }
-
-
-//
-// Expression Sub-languages -----------------------------------------------------
-//
-
-Expression
-  = term:_expr_term ops:Operators? {
-      return ops ? ops : term
-    }
-
-_expr_term
-  = head:(
-				  TemplateExpr
-				/ LiteralValue
-				/ FunctionCall
-				/ CollectionValue
-				/ VariableExpr
-				/ ForExpr
-				/ "(" _ expr:Expression _ ")" { return expr }
-				)
-	  tail:(Index / GetAttr / Splat)* {
-			// Apply postfix operators in sequence
-			return tail.reduce((expr, op) => ({
-				...op,
-				target: expr
-		}), head)
-	}
-
-//
-// Literal Expressions ---------------------------------------------------------
-//
+  = '"' chars:_char* '"' 
+	{ return {type: NodeTypes.StringLiteral, value: chars.join('')} }
 
 /**
  * LiteralValue = (NumericLit | "true" | "false" | "null");
@@ -283,12 +287,7 @@ CollectionValue
 // tuple = "[" ((Expression (("," | Newline) Expression)* ","?)?) "]";
 _tuple
 	= _ "["__ !"for" elements:Expression|.., _ ("," / NewLine) _ | __ "]" _
-		{
-		return {
-			type: NodeTypes.TupleValue,
-			elements: elements.flat()
-		}
-	}
+	{ return { type: NodeTypes.TupleValue, elements: elements.flat() } }
 
 // object = "{" ((objectelem (( "," | Newline) objectelem)* ","?)?) "}";
 // Return as a list of key-value pairs (objectelem)
@@ -298,29 +297,51 @@ _object
     __ !"for"
     elements:(_object_content)?
     __ "}" 
-    _ {
-      return {
-        type: NodeTypes.ObjectValue,
-        elements: elements || []
-      }
-    }
+	{ return { type: NodeTypes.ObjectValue, elements: elements || [] } }
 
 _object_content
   = first:_objectelem
-    rest:(__ _objectelem)* {
-      return [first, ...rest.map(r => r[1])]
-    }
+    rest:(__ _objectelem)* 
+	{ return [first, ...rest.map(r => r[1])] }
 
 _objectelem
   = __ key:Identifier 
     _ ("=" / ":")
     _ value:Expression 
-    (_ "," / NewLine / __) {
-      return {
-        key: key,
-        value: value
-      }
-    }
+    (_ "," / NewLine / __) 
+	{ return { key, value } }
+
+//
+// For Expressions -------------------------------------------------------------
+//
+
+/**
+ * For Expressions
+ * forTupleExpr = "[" _for_intro Expression _for_cond? "]";
+ * forObjectExpr = "{" _for_intro Expression "=>" Expression "..."? _for_cond? "}";
+ * _for_intro = "for" Identifier ("," Identifier)? "in" Expression ":";
+ * _for_cond = "if" Expression;
+ */
+ForExpr
+  = ForTupleExpr
+  / ForObjectExpr
+
+ForTupleExpr
+  = "[" __ intro:_for_intro __ expression:Expression __ condition:_for_cond? __ "]" 
+	{ return { type: NodeTypes.ForExpression, kind: ForKinds.Tuple, intro, expression, condition } }
+
+ForObjectExpr
+  = "{" __ intro:_for_intro __ key:Expression __ "=>" __ value:Expression 
+    ellipsis:(_ "...")? __ condition:_for_cond? __ "}" 
+	{ return { type: NodeTypes.ForExpression, kind: ForKinds.Object, intro, key, value, grouping: !!ellipsis, condition } }
+
+_for_intro
+  = "for" _ key:Identifier _ v:("," _ value:Identifier)? _ 
+    "in" _ collection:Expression _ ":"
+	{ return { iterator: key, value: v?.value || null, collection } }
+
+_for_cond
+  = "if" _ expr:Expression { return expr }
 
 //
 // Templates Expressions and Sub-languages -------------------------------------
@@ -338,20 +359,14 @@ TemplateExpr
  * Different from StringLit as it allows ${...} interpolation
  */
 QuotedTemplate
-  = '"' content:QuotedTemplateContent* '"' {
-    return {
-      type: NodeTypes.QuotedTemplateExpression,
-      parts: content.flat()
-    }
-  }
+  = '"' content:QuotedTemplateContent* '"' 
+	{ return { type: NodeTypes.QuotedTemplateExpression, parts: content.flat() } }
 
 QuotedTemplateContent
   = TemplateInterpolation
   / TemplateDirective
-  / chars:_template_char+ {
-      return { type: NodeTypes.TemplateLiteral, value: chars.join('') }
-    }
-
+  / chars:_template_char+ 
+	{ return { type: NodeTypes.TemplateLiteral, value: chars.join('') } }
 
 /**
  * Heredoc template
@@ -359,14 +374,8 @@ QuotedTemplateContent
 HeredocTemplate
   = _ "<<" indent:("-"/"") _ marker:_beginMarker _ NewLine
     	template:HeredocTemplateContent
-    	_endMarker {
-				return {
-					type: NodeTypes.HeredocTemplateExpression,
-					marker: marker,
-					stripIndent: indent === "-",
-					template: template
-				}
-			}
+    	_endMarker 
+	{ return { type: NodeTypes.HeredocTemplateExpression, marker, stripIndent: indent === "-", template } }
 
 // Ensure we match the beginning of the heredoc marker
 _beginMarker = begin:Identifier { heredocMarker = begin.value; return begin;}
@@ -385,12 +394,8 @@ Template
 	
 
 TemplateLiteral
-  = chars:(!("${" / "%{" / _endMarker) .)+ {
-		return {
-			type: NodeTypes.TemplateLiteral,
-			value: chars.map(c => c[1]).join('')
-		}
-	}
+  = chars:(!("${" / "%{" / _endMarker) .)+
+	{ return { type: NodeTypes.TemplateLiteral, value: chars.map(c => c[1]).join('') } }
 
 /**
  * TemplateInterpolation = ("${" | "${~") Expression ("}" | "~}");
@@ -398,17 +403,9 @@ TemplateLiteral
  */
 TemplateInterpolation
   = "${" strip_left:"~"? 
-    _ expr:Expression _ 
-    strip_right:"~"? "}" {
-    return {
-      type: NodeTypes.TemplateInterpolation,
-      expr: expr,
-      strip: {
-        left: strip_left !== null,
-        right: strip_right !== null
-      }
-    }
-  }
+    _ expression:Expression _ 
+    strip_right:"~"? "}" 
+	{ return { type: NodeTypes.TemplateInterpolation, expression, strip: { left: !!strip_left, right: !!strip_right } } }
 
 /**
  * Template directives for conditional and iteration logic
@@ -432,31 +429,18 @@ TemplateIf
     else_part:(
       "%{" strip_else_start:"~"? _ "else" _ strip_else_end:"~"? "}"
       else_template:Template
-      { return {
-          template: else_template,
-          strip: {
-            start: strip_else_start !== null,
-            end: strip_else_end !== null
-          }
-        }
-      }
+      { return { template: else_template, strip: { start: !!strip_else_start, end: !!strip_else_end } } }
     )?
     "%{" strip_endif_start:"~"? _ "endif" _ strip_endif_end:"~"? "}" {
     return {
       type: NodeTypes.TemplateIf,
       condition: condition,
       then: then_template,
-      else: else_part?.template,
+      else: else_part?.template || null,
       strip: {
-        if: {
-          start: strip_start !== null,
-          end: strip_end !== null
-        },
-        else: else_part?.strip,
-        endif: {
-          start: strip_endif_start !== null,
-          end: strip_endif_end !== null
-        }
+        if: { start: !!strip_start, end: !!strip_end },
+        else: else_part?.strip || null,
+        endif: { start: !!strip_endif_start, end: !!strip_endif_end }
       }
     }
   }
@@ -471,32 +455,21 @@ TemplateIf
  */
 TemplateFor
   = "%{" strip_start:"~"? _ 
-    "for" _ key:Identifier _ value:("," _ Identifier)? _ 
+    "for" _ key:Identifier _ ("," _ value:Identifier)? _ 
     "in" _ collection:Expression _ 
     strip_end:"~"? "}"
     body:Template
     "%{" strip_endfor_start:"~"? _ "endfor" _ strip_endfor_end:"~"? "}" {
     return {
       type: NodeTypes.TemplateFor,
-      intro: {
-        key: key,
-        value: value ? value[2] : null,
-        collection: collection
-      },
+      intro: { key, value, collection },
       body: body,
       strip: {
-        for: {
-          start: strip_start !== null,
-          end: strip_end !== null
-        },
-        endfor: {
-          start: strip_endfor_start !== null,
-          end: strip_endfor_end !== null
-        }
+        for: { start: !!strip_start, end: !!strip_end },
+        endfor: { start: !!strip_endfor_start, end: !!strip_endfor_end }
       }
     }
   }
-
 
 //
 // Function Call Expressions ---------------------------------------------------
@@ -507,92 +480,25 @@ TemplateFor
  * FunctionCall = Identifier "(" arguments ")";
  */
 FunctionCall
-	= name:Identifier _ "(" __ args:_function_args? __ ")" {
-    return {
-      type: NodeTypes.FunctionCallExpression,
-      name: name,
-      args: args // List of Expressions
-    }
-  }
+	= name:Identifier _ "(" _ args:_function_args? _ ")" 
+	{ return { type: NodeTypes.FunctionCallExpression, name, args: args || [] } }
 
 /**
  * Function arguments
  * arguments = (() || (Expression ("," Expression)* ("," | "...")?)
  */
 _function_args
-  = _
-	/ _ args:(Expression (_ "," __ Expression)* _ ","?)? {
-    return args
-  }
-
+  = first:Expression rest:(_ "," _ expr:Expression { return expr })* _ ","?
+    { return first ? [first, ...(rest || [])] : [] }
+  / _ { return [] }
 
 //
 // Variable Expressions ---------------------------------------------------------
 //
 
 VariableExpr
-  = name:Identifier {
-    return {
-      type: NodeTypes.VariableExpression,
-      name: name
-    }
-  }
+  = name:Identifier { return { type: NodeTypes.VariableExpression, name } }
 
-
-//
-// For Expressions -------------------------------------------------------------
-//
-
-/**
- * For Expressions
- * forTupleExpr = "[" _for_intro Expression _for_cond? "]";
- * forObjectExpr = "{" _for_intro Expression "=>" Expression "..."? _for_cond? "}";
- * _for_intro = "for" Identifier ("," Identifier)? "in" Expression ":";
- * _for_cond = "if" Expression;
- */
-ForExpr
-  = ForTupleExpr
-  / ForObjectExpr
-
-ForTupleExpr
-  = "[" _ intro:_for_intro _ expr:Expression _ cond:_for_cond? _ "]" {
-    return {
-      type: NodeTypes.ForExpression,
-      kind: ForKinds.Tuple,
-      intro: intro,
-      expr: expr,
-      condition: cond
-    }
-  }
-
-ForObjectExpr
-  = "{" _ intro:_for_intro _ key:Expression _ "=>" _ value:Expression 
-    ellipsis:(_ "...")? _ cond:_for_cond? _ "}" {
-    return {
-      type: NodeTypes.ForExpression,
-      kind: ForKinds.Object,
-      intro: intro,
-      key: key,
-      value: value,
-      grouping: ellipsis !== null,
-      condition: cond
-    }
-  }
-
-_for_intro
-  = "for" _ key:Identifier _ value:("," _ Identifier)? _ 
-    "in" _ collection:Expression _ ":" {
-    return {
-      iterator: key,
-      value: value ? value[2] : null,
-      collection: collection
-    }
-  }
-
-_for_cond
-  = "if" _ expr:Expression {
-    return expr
-  }
 
 //
 // Postfix operators: Index, GetAttr, and Splat --------------------------------
@@ -621,12 +527,8 @@ LegacyIndex
 // Identifier cannot be a number (or numeric-only string) such that
 // we can distinguish it from a legacy index operator
 GetAttr
-  = _ "." _ name:Identifier {
-    return {
-      type: NodeTypes.GetAttributeOperator,
-      name: name
-    }
-  }
+  = _ "." _ key:Identifier 
+	{ return { type: NodeTypes.GetAttributeOperator, key } }
 
 // Splat = attrSplat | fullSplat
 // attrSplat = "." "*" GetAttr*
@@ -636,154 +538,14 @@ Splat
   / FullSplat
 
 AttrSplat
-  = _ "." _ "*" attrs:GetAttr* {
-    return {
-      type: NodeTypes.SplatOperator,
-      kind: SplatKinds.Attribute,
-      attrs: attrs
-    }
+  = _ "." _ "*" attributes:GetAttr* {
+    return { type: NodeTypes.SplatOperator, kind: SplatKinds.Attribute, attributes }
   }
 
 FullSplat
-  = _ "[" _ "*" _ "]" ops:(GetAttr / Index)* {
-    return {
-      type: NodeTypes.SplatOperator,
-      kind: SplatKinds.Full, 
-      ops: ops
-    }
-	}
+  = _ "[" _ "*" _ "]" operations:(GetAttr / Index)* 
+	{ return { type: NodeTypes.SplatOperator, kind: SplatKinds.Full, operations } }
 
-
-//
-// Conditional Operator ---------------------------------------------------------
-//
-
-// Simply wrap the conditional operator to avoid confusion as it has other 
-// operations with lower precedence following it.
-Operators = ConditionalOp
-
-// Conditional = Expression "?" Expression ":" Expression
-ConditionalOp
-  = _ predicate:Expression _ "?"
-    _ trueExpr:Expression _ ":" 
-    _ falseExpr:Expression
-		_ {
-    return {
-      type: NodeTypes.ConditionalOperator,
-      predicate: predicate,
-      trueExpr: trueExpr,
-      falseExpr: falseExpr
-    }
-  }
-  / Operation
-
-//
-// Operations -------------------------------------------------------------------
-//
-
-// Operation = unaryOp | Binary
-Operation
-  = UnaryOp
-  / Binary
-
-// unaryOp = ("-" | "!") _expr_term
-UnaryOp
-  = _ op:("-" / "!") _ term:_expr_term {
-    return {
-      type: NodeTypes.UnaryOperator,
-      operator: op,
-      term: term
-    }
-  }
-
-// Binary operations with precedence levels (highest to lowest)
-// Note that the precedence levels are not explicitly defined in the grammar
-// but are implied by the order of the rules.
-// For example, the MultiplicativeExpr rule binds tighter than the AdditiveExpr rule.
-// This is because the MultiplicativeExpr rule is defined before the AdditiveExpr rule.
-Binary
-  = MultiplicativeExpr  // Level 6
-	// Note: Intentionally commenting out for documentation purpose
-	// See each level for the precedence rules.
-	// / AdditiveExpr       // Level 5
-	// / ComparisonExpr     // Level 4
-	// / EqualityExpr       // Level 3
-	// / LogicalAndExpr     // Level 2
-	// / LogicalOrExpr      // Level 1
-	// / _expr_term  <--- lowest precedence
-	// End of intentionally commented out code
-
-// Level 6: * / %
-MultiplicativeExpr
-  = left:_expr_term _ op:("*" / "/" / "%") _ right:_expr_term {
-    return {
-      type: NodeTypes.BinaryOperator,
-      operator: op,
-      left: left,
-      right: right
-    }
-  }
-  / AdditiveExpr
-
-// Level 5: + -
-AdditiveExpr
-  = left:_expr_term _ op:("+" / "-") _ right:_expr_term {
-    return {
-      type: NodeTypes.BinaryOperator,
-      operator: op,
-      left: left,
-      right: right
-    }
-  }
-  / ComparisonExpr
-
-// Level 4: > >= < <=
-ComparisonExpr
-  = left:_expr_term _ op:(">=" / "<=" / ">" / "<") _ right:_expr_term {
-    return {
-      type: NodeTypes.BinaryOperator,
-      operator: op,
-      left: left,
-      right: right
-    }
-  }
-  / EqualityExpr
-
-// Level 3: == !=
-EqualityExpr
-  = left:_expr_term _ op:("==" / "!=") _ right:_expr_term {
-    return {
-      type: NodeTypes.BinaryOperator,
-      operator: op,
-      left: left,
-      right: right
-    }
-  }
-  / LogicalAndExpr
-
-// Level 2: &&
-LogicalAndExpr
-  = left:_expr_term _ "&&" _ right:_expr_term {
-    return {
-      type: NodeTypes.BinaryOperator,
-      operator: "&&",
-      left: left,
-      right: right
-    }
-  }
-  / LogicalOrExpr
-
-// Level 1: ||
-LogicalOrExpr
-  = left:_expr_term _ "||" _ right:_expr_term {
-    return {
-      type: NodeTypes.BinaryOperator,
-      operator: "||",
-      left: left,
-      right: right
-    }
-  }
-  / _expr_term
 
 //
 // Helper rules -----------------------------------------------------------------

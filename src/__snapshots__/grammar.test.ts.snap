@@ -121,61 +121,70 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "elements": [
+          "args": [
             {
-              "key": {
-                "type": "Identifier",
-                "value": "instance_class",
-              },
-              "value": {
-                "name": {
-                  "type": "Identifier",
-                  "value": "string",
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "instance_class",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "string",
+                    },
+                    "type": "VariableExpression",
+                  },
                 },
-                "type": "VariableExpression",
-              },
-            },
-            {
-              "key": {
-                "type": "Identifier",
-                "value": "allocated_storage",
-              },
-              "value": {
-                "name": {
-                  "type": "Identifier",
-                  "value": "number",
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "allocated_storage",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "number",
+                    },
+                    "type": "VariableExpression",
+                  },
                 },
-                "type": "VariableExpression",
-              },
-            },
-            {
-              "key": {
-                "type": "Identifier",
-                "value": "multi_az",
-              },
-              "value": {
-                "name": {
-                  "type": "Identifier",
-                  "value": "bool",
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "multi_az",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "bool",
+                    },
+                    "type": "VariableExpression",
+                  },
                 },
-                "type": "VariableExpression",
-              },
-            },
-            {
-              "key": {
-                "type": "Identifier",
-                "value": "engine_version",
-              },
-              "value": {
-                "name": {
-                  "type": "Identifier",
-                  "value": "string",
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "engine_version",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "string",
+                    },
+                    "type": "VariableExpression",
+                  },
                 },
-                "type": "VariableExpression",
-              },
+              ],
+              "type": "ObjectValue",
             },
           ],
-          "type": "ObjectValue",
+          "name": {
+            "type": "Identifier",
+            "value": "object",
+          },
+          "type": "FunctionCallExpression",
         },
       },
       {
@@ -262,11 +271,20 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
+          "args": [
+            {
+              "name": {
+                "type": "Identifier",
+                "value": "string",
+              },
+              "type": "VariableExpression",
+            },
+          ],
           "name": {
             "type": "Identifier",
-            "value": "string",
+            "value": "list",
           },
-          "type": "VariableExpression",
+          "type": "FunctionCallExpression",
         },
       },
       {
@@ -330,11 +348,20 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
+          "args": [
+            {
+              "name": {
+                "type": "Identifier",
+                "value": "string",
+              },
+              "type": "VariableExpression",
+            },
+          ],
           "name": {
             "type": "Identifier",
-            "value": "string",
+            "value": "map",
           },
-          "type": "VariableExpression",
+          "type": "FunctionCallExpression",
         },
       },
       {
@@ -606,7 +633,7 @@ exports[`Smoke parses a test tf file 1`] = `
             },
             "type": "Attribute",
             "value": {
-              "name": {
+              "key": {
                 "type": "Identifier",
                 "value": "environment_tags",
               },
@@ -646,7 +673,7 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "vpc_cidr",
           },
@@ -702,8 +729,8 @@ exports[`Smoke parses a test tf file 1`] = `
                     "value": "main-vpc-",
                   },
                   {
-                    "expr": {
-                      "name": {
+                    "expression": {
+                      "key": {
                         "type": "Identifier",
                         "value": "environment",
                       },
@@ -762,8 +789,8 @@ exports[`Smoke parses a test tf file 1`] = `
               "value": "myapp-",
             },
             {
-              "expr": {
-                "name": {
+              "expression": {
+                "key": {
                   "type": "Identifier",
                   "value": "environment",
                 },
@@ -813,12 +840,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "engine_version",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "db_config",
             },
@@ -841,12 +868,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "instance_class",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "db_config",
             },
@@ -869,12 +896,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "allocated_storage",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "db_config",
             },
@@ -951,14 +978,23 @@ exports[`Smoke parses a test tf file 1`] = `
               "value": "		",
             },
             {
-              "expr": {
-                "parts": [
+              "expression": {
+                "args": [
                   {
-                    "type": "TemplateLiteral",
-                    "value": "PLACEHOLDER_PASSWORD",
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "PLACEHOLDER_PASSWORD",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
                   },
                 ],
-                "type": "QuotedTemplateExpression",
+                "name": {
+                  "type": "Identifier",
+                  "value": "base64encode",
+                },
+                "type": "FunctionCallExpression",
               },
               "strip": {
                 "left": false,
@@ -988,12 +1024,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "multi_az",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "db_config",
             },
@@ -1029,12 +1065,12 @@ exports[`Smoke parses a test tf file 1`] = `
         "value": {
           "elements": [
             {
-              "name": {
+              "key": {
                 "type": "Identifier",
                 "value": "id",
               },
               "target": {
-                "name": {
+                "key": {
                   "type": "Identifier",
                   "value": "db",
                 },
@@ -1060,12 +1096,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "name",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "main",
             },
@@ -1107,7 +1143,7 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "cluster_name",
           },
@@ -1182,7 +1218,7 @@ exports[`Smoke parses a test tf file 1`] = `
                 },
                 "type": "Attribute",
                 "value": {
-                  "name": {
+                  "key": {
                     "type": "Identifier",
                     "value": "key",
                   },
@@ -1203,7 +1239,7 @@ exports[`Smoke parses a test tf file 1`] = `
                 },
                 "type": "Attribute",
                 "value": {
-                  "name": {
+                  "key": {
                     "type": "Identifier",
                     "value": "value",
                   },
@@ -1301,12 +1337,12 @@ exports[`Smoke parses a test tf file 1`] = `
         "value": {
           "elements": [
             {
-              "name": {
+              "key": {
                 "type": "Identifier",
                 "value": "id",
               },
               "target": {
-                "name": {
+                "key": {
                   "type": "Identifier",
                   "value": "alb",
                 },
@@ -1333,9 +1369,9 @@ exports[`Smoke parses a test tf file 1`] = `
         "type": "Attribute",
         "value": {
           "kind": "Full",
-          "ops": [
+          "operations": [
             {
-              "name": {
+              "key": {
                 "type": "Identifier",
                 "value": "id",
               },
@@ -1343,7 +1379,7 @@ exports[`Smoke parses a test tf file 1`] = `
             },
           ],
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "public",
             },
@@ -1420,12 +1456,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "id",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "assets",
             },
@@ -1555,96 +1591,105 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "elements": [
+          "args": [
             {
-              "key": {
-                "type": "Identifier",
-                "value": "Version",
-              },
-              "value": {
-                "parts": [
-                  {
-                    "type": "TemplateLiteral",
-                    "value": "2012-10-17",
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "Version",
                   },
-                ],
-                "type": "QuotedTemplateExpression",
-              },
-            },
-            {
-              "key": {
-                "type": "Identifier",
-                "value": "Statement",
-              },
-              "value": {
-                "elements": [
-                  {
-                    "elements": [
+                  "value": {
+                    "parts": [
                       {
-                        "key": {
-                          "type": "Identifier",
-                          "value": "Action",
-                        },
-                        "value": {
-                          "parts": [
-                            {
-                              "type": "TemplateLiteral",
-                              "value": "sts:AssumeRole",
-                            },
-                          ],
-                          "type": "QuotedTemplateExpression",
-                        },
-                      },
-                      {
-                        "key": {
-                          "type": "Identifier",
-                          "value": "Effect",
-                        },
-                        "value": {
-                          "parts": [
-                            {
-                              "type": "TemplateLiteral",
-                              "value": "Allow",
-                            },
-                          ],
-                          "type": "QuotedTemplateExpression",
-                        },
-                      },
-                      {
-                        "key": {
-                          "type": "Identifier",
-                          "value": "Principal",
-                        },
-                        "value": {
-                          "elements": [
-                            {
-                              "key": {
-                                "type": "Identifier",
-                                "value": "Service",
-                              },
-                              "value": {
-                                "parts": [
-                                  {
-                                    "type": "TemplateLiteral",
-                                    "value": "ecs-tasks.amazonaws.com",
-                                  },
-                                ],
-                                "type": "QuotedTemplateExpression",
-                              },
-                            },
-                          ],
-                          "type": "ObjectValue",
-                        },
+                        "type": "TemplateLiteral",
+                        "value": "2012-10-17",
                       },
                     ],
-                    "type": "ObjectValue",
+                    "type": "QuotedTemplateExpression",
                   },
-                ],
-                "type": "TupleValue",
-              },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "Statement",
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "elements": [
+                          {
+                            "key": {
+                              "type": "Identifier",
+                              "value": "Action",
+                            },
+                            "value": {
+                              "parts": [
+                                {
+                                  "type": "TemplateLiteral",
+                                  "value": "sts:AssumeRole",
+                                },
+                              ],
+                              "type": "QuotedTemplateExpression",
+                            },
+                          },
+                          {
+                            "key": {
+                              "type": "Identifier",
+                              "value": "Effect",
+                            },
+                            "value": {
+                              "parts": [
+                                {
+                                  "type": "TemplateLiteral",
+                                  "value": "Allow",
+                                },
+                              ],
+                              "type": "QuotedTemplateExpression",
+                            },
+                          },
+                          {
+                            "key": {
+                              "type": "Identifier",
+                              "value": "Principal",
+                            },
+                            "value": {
+                              "elements": [
+                                {
+                                  "key": {
+                                    "type": "Identifier",
+                                    "value": "Service",
+                                  },
+                                  "value": {
+                                    "parts": [
+                                      {
+                                        "type": "TemplateLiteral",
+                                        "value": "ecs-tasks.amazonaws.com",
+                                      },
+                                    ],
+                                    "type": "QuotedTemplateExpression",
+                                  },
+                                },
+                              ],
+                              "type": "ObjectValue",
+                            },
+                          },
+                        ],
+                        "type": "ObjectValue",
+                      },
+                    ],
+                    "type": "TupleValue",
+                  },
+                },
+              ],
+              "type": "ObjectValue",
             },
           ],
-          "type": "ObjectValue",
+          "name": {
+            "type": "Identifier",
+            "value": "jsonencode",
+          },
+          "type": "FunctionCallExpression",
         },
       },
     ],
@@ -1689,12 +1734,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "id",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "ecs_task_role",
             },
@@ -1739,13 +1784,13 @@ exports[`Smoke parses a test tf file 1`] = `
 ,
             },
             {
-              "expr": {
-                "name": {
+              "expression": {
+                "key": {
                   "type": "Identifier",
                   "value": "arn",
                 },
                 "target": {
-                  "name": {
+                  "key": {
                     "type": "Identifier",
                     "value": "assets",
                   },
@@ -1859,12 +1904,12 @@ exports[`Smoke parses a test tf file 1`] = `
             },
             "type": "Attribute",
             "value": {
-              "name": {
+              "key": {
                 "type": "Identifier",
                 "value": "dns_name",
               },
               "target": {
-                "name": {
+                "key": {
                   "type": "Identifier",
                   "value": "main",
                 },
@@ -1887,12 +1932,12 @@ exports[`Smoke parses a test tf file 1`] = `
             },
             "type": "Attribute",
             "value": {
-              "name": {
+              "key": {
                 "type": "Identifier",
                 "value": "zone_id",
               },
               "target": {
-                "name": {
+                "key": {
                   "type": "Identifier",
                   "value": "main",
                 },
@@ -1965,12 +2010,12 @@ exports[`Smoke parses a test tf file 1`] = `
         },
         "type": "Attribute",
         "value": {
-          "name": {
+          "key": {
             "type": "Identifier",
             "value": "id",
           },
           "target": {
-            "name": {
+            "key": {
               "type": "Identifier",
               "value": "main",
             },
@@ -2039,12 +2084,12 @@ exports[`Smoke parses a test tf file 1`] = `
             "value": {
               "elements": [
                 {
-                  "name": {
+                  "key": {
                     "type": "Identifier",
                     "value": "id",
                   },
                   "target": {
-                    "name": {
+                    "key": {
                       "type": "Identifier",
                       "value": "alb",
                     },
@@ -2168,8 +2213,8 @@ exports[`Smoke parses a test tf file 1`] = `
               "value": "myapp-",
             },
             {
-              "expr": {
-                "name": {
+              "expression": {
+                "key": {
                   "type": "Identifier",
                   "value": "environment",
                 },
@@ -2193,11 +2238,20 @@ exports[`Smoke parses a test tf file 1`] = `
               "value": "-",
             },
             {
-              "expr": {
-                "args": [],
+              "expression": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": {
+                      "type": "Identifier",
+                      "value": "timestamp",
+                    },
+                    "type": "FunctionCallExpression",
+                  },
+                ],
                 "name": {
                   "type": "Identifier",
-                  "value": "timestamp",
+                  "value": "md5",
                 },
                 "type": "FunctionCallExpression",
               },

@@ -65,7 +65,7 @@ export type OneLineBlock = {
 	type: typeof NodeTypes.OneLineBlock;
 	blockType: Identifier;
 	labels: Label[];
-	body: Attribute;
+	attribute: Attribute | null;
 };
 
 export type Expression =
@@ -158,7 +158,7 @@ export type TemplateLiteral = {
 
 export type TemplateInterpolation = {
 	type: typeof NodeTypes.TemplateInterpolation;
-	expr: Expression;
+	expression: Expression;
 	strip: {
 		left: boolean;
 		right: boolean;
@@ -210,30 +210,26 @@ export const ForKinds = {
 
 export type ForKind = (typeof ForKinds)[keyof typeof ForKinds];
 
-export type ForExpression = {
-	type: typeof NodeTypes.ForExpression;
-	kind: ForKind;
-	intro: {
-		iterator: Identifier;
-		value: Identifier | null;
-		collection: Expression;
-	};
-	expr: Expression;
-	condition: Expression | null;
+export type ForExpression = ForTupleExpression | ForObjectExpression;
+
+export type ForIntro = {
+	iterator: Identifier;
+	value: Identifier | null;
+	collection: Expression;
 };
 
 export type ForTupleExpression = {
-	type: typeof NodeTypes.ForTupleExpression;
+	type: typeof NodeTypes.ForExpression;
 	kind: typeof ForKinds.Tuple;
-	intro: Identifier;
-	expr: Expression;
+	intro: ForIntro;
+	expression: Expression;
 	condition: Expression | null;
 };
 
 export type ForObjectExpression = {
-	type: typeof NodeTypes.ForObjectExpression;
+	type: typeof NodeTypes.ForExpression;
 	kind: typeof ForKinds.Object;
-	intro: Identifier;
+	intro: ForIntro;
 	key: Expression;
 	value: Expression;
 	grouping: boolean;
@@ -254,7 +250,7 @@ export type LegacyIndexOperator = {
 
 export type GetAttributeOperator = {
 	type: typeof NodeTypes.GetAttributeOperator;
-	name: Identifier;
+	key: Identifier;
 	target: Expression;
 };
 
@@ -267,17 +263,19 @@ export const SplatKinds = {
 
 export type SplatKind = (typeof SplatKinds)[keyof typeof SplatKinds];
 
+export type SplatGetAttributeOperator = Omit<GetAttributeOperator, "target">;
+
 export type AttrSplatOperator = {
 	type: typeof NodeTypes.SplatOperator;
 	kind: typeof SplatKinds.Attribute;
-	attrs: GetAttributeOperator[];
+	attributes: SplatGetAttributeOperator[];
 	target: Expression;
 };
 
 export type FullSplatOperator = {
 	type: typeof NodeTypes.SplatOperator;
 	kind: typeof SplatKinds.Full;
-	ops: (GetAttributeOperator | IndexOperator)[];
+	operations: (SplatGetAttributeOperator | IndexOperator)[];
 	target: Expression;
 };
 
