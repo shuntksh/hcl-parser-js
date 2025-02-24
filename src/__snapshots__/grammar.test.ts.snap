@@ -2383,3 +2383,2387 @@ exports[`Smoke parses a test tf file 1`] = `
   },
 ]
 `;
+
+exports[`Smoke parses a test hcl file 1`] = `
+[
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "variable",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "description",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "Environment name",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "type",
+        },
+        "type": "Attribute",
+        "value": {
+          "name": {
+            "type": "Identifier",
+            "value": "string",
+          },
+          "type": "VariableExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "default",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "production",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "environment",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "variable",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "type",
+        },
+        "type": "Attribute",
+        "value": {
+          "name": {
+            "type": "Identifier",
+            "value": "string",
+          },
+          "type": "VariableExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "default",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "10.0.0.0/16",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "vpc_cidr",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "variable",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "type",
+        },
+        "type": "Attribute",
+        "value": {
+          "args": [
+            {
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "instance_class",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "string",
+                    },
+                    "type": "VariableExpression",
+                  },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "allocated_storage",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "number",
+                    },
+                    "type": "VariableExpression",
+                  },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "multi_az",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "bool",
+                    },
+                    "type": "VariableExpression",
+                  },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "engine_version",
+                  },
+                  "value": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "string",
+                    },
+                    "type": "VariableExpression",
+                  },
+                },
+              ],
+              "type": "ObjectValue",
+            },
+          ],
+          "name": {
+            "type": "Identifier",
+            "value": "object",
+          },
+          "type": "FunctionCallExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "default",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "instance_class",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "db.t3.medium",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "allocated_storage",
+              },
+              "value": {
+                "type": "NumberLiteral",
+                "value": 100,
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "multi_az",
+              },
+              "value": {
+                "type": "BooleanLiteral",
+                "value": true,
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "engine_version",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "13.7",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+          ],
+          "type": "ObjectValue",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "db_config",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "variable",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "type",
+        },
+        "type": "Attribute",
+        "value": {
+          "args": [
+            {
+              "name": {
+                "type": "Identifier",
+                "value": "string",
+              },
+              "type": "VariableExpression",
+            },
+          ],
+          "name": {
+            "type": "Identifier",
+            "value": "list",
+          },
+          "type": "FunctionCallExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "default",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "us-west-2a",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+            {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "us-west-2b",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+            {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "us-west-2c",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          ],
+          "type": "TupleValue",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "availability_zones",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "variable",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "type",
+        },
+        "type": "Attribute",
+        "value": {
+          "args": [
+            {
+              "name": {
+                "type": "Identifier",
+                "value": "string",
+              },
+              "type": "VariableExpression",
+            },
+          ],
+          "name": {
+            "type": "Identifier",
+            "value": "map",
+          },
+          "type": "FunctionCallExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "default",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "Environment",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "Production",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "Terraform",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "true",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "Project",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "MyApp",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+          ],
+          "type": "ObjectValue",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "environment_tags",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "terraform",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "required_version",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": ">= 1.0.0",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "required_providers",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "aws",
+            },
+            "type": "Attribute",
+            "value": {
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "source",
+                  },
+                  "value": {
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "hashicorp/aws",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
+                  },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "version",
+                  },
+                  "value": {
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "~> 4.0",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
+                  },
+                },
+              ],
+              "type": "ObjectValue",
+            },
+          },
+        ],
+        "labels": [],
+        "type": "Block",
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "backend",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "bucket",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "terraform-state-prod",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "key",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "terraform.tfstate",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "region",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "us-west-2",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "dynamodb_table",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "terraform-locks",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "encrypt",
+            },
+            "type": "Attribute",
+            "value": {
+              "type": "BooleanLiteral",
+              "value": true,
+            },
+          },
+        ],
+        "labels": [
+          {
+            "type": "StringLiteral",
+            "value": "s3",
+          },
+        ],
+        "type": "Block",
+      },
+    ],
+    "labels": [],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "provider",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "region",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "us-west-2",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "default_tags",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "tags",
+            },
+            "type": "Attribute",
+            "value": {
+              "key": {
+                "type": "Identifier",
+                "value": "environment_tags",
+              },
+              "target": {
+                "name": {
+                  "type": "Identifier",
+                  "value": "var",
+                },
+                "type": "VariableExpression",
+              },
+              "type": "GetAttributeOperator",
+            },
+          },
+        ],
+        "labels": [],
+        "type": "Block",
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "cidr_block",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "vpc_cidr",
+          },
+          "target": {
+            "name": {
+              "type": "Identifier",
+              "value": "var",
+            },
+            "type": "VariableExpression",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "enable_dns_hostnames",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "BooleanLiteral",
+          "value": true,
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "enable_dns_support",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "BooleanLiteral",
+          "value": true,
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "tags",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "Name",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "main-vpc-",
+                  },
+                  {
+                    "expression": {
+                      "key": {
+                        "type": "Identifier",
+                        "value": "environment",
+                      },
+                      "target": {
+                        "name": {
+                          "type": "Identifier",
+                          "value": "var",
+                        },
+                        "type": "VariableExpression",
+                      },
+                      "type": "GetAttributeOperator",
+                    },
+                    "strip": {
+                      "left": false,
+                      "right": false,
+                    },
+                    "type": "TemplateInterpolation",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+          ],
+          "type": "ObjectValue",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_vpc",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "main",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "identifier",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-",
+            },
+            {
+              "expression": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "environment",
+                },
+                "target": {
+                  "name": {
+                    "type": "Identifier",
+                    "value": "var",
+                  },
+                  "type": "VariableExpression",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "strip": {
+                "left": false,
+                "right": false,
+              },
+              "type": "TemplateInterpolation",
+            },
+            {
+              "type": "TemplateLiteral",
+              "value": "-db",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "engine",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "postgres",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "engine_version",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "engine_version",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "db_config",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "var",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "instance_class",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "instance_class",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "db_config",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "var",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "allocated_storage",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "allocated_storage",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "db_config",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "var",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "storage_encrypted",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "BooleanLiteral",
+          "value": true,
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "db_name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myappdb",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "username",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "dbadmin",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "password",
+        },
+        "type": "Attribute",
+        "value": {
+          "marker": {
+            "type": "Identifier",
+            "value": "EOT",
+          },
+          "stripIndent": true,
+          "template": [
+            {
+              "type": "TemplateLiteral",
+              "value": "		",
+            },
+            {
+              "expression": {
+                "args": [
+                  {
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "PLACEHOLDER_PASSWORD",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
+                  },
+                ],
+                "name": {
+                  "type": "Identifier",
+                  "value": "base64encode",
+                },
+                "type": "FunctionCallExpression",
+              },
+              "strip": {
+                "left": false,
+                "right": false,
+              },
+              "type": "TemplateInterpolation",
+            },
+          ],
+          "type": "HeredocTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "backup_retention_period",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "NumberLiteral",
+          "value": 7,
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "multi_az",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "multi_az",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "db_config",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "var",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "skip_final_snapshot",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "BooleanLiteral",
+          "value": false,
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "vpc_security_group_ids",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "id",
+              },
+              "target": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "db",
+                },
+                "target": {
+                  "name": {
+                    "type": "Identifier",
+                    "value": "aws_security_group",
+                  },
+                  "type": "VariableExpression",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "type": "GetAttributeOperator",
+            },
+          ],
+          "type": "TupleValue",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "db_subnet_group_name",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "name",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "main",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "aws_db_subnet_group",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_db_instance",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "main",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "cluster_name",
+          },
+          "target": {
+            "name": {
+              "type": "Identifier",
+              "value": "local",
+            },
+            "type": "VariableExpression",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "dynamic",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "for_each",
+            },
+            "type": "Attribute",
+            "value": {
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "containerInsights",
+                  },
+                  "value": {
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "enabled",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
+                  },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "capacityProviders",
+                  },
+                  "value": {
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "FARGATE",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
+                  },
+                },
+              ],
+              "type": "ObjectValue",
+            },
+          },
+          {
+            "blockType": {
+              "type": "Identifier",
+              "value": "content",
+            },
+            "bodies": [
+              {
+                "name": {
+                  "type": "Identifier",
+                  "value": "name",
+                },
+                "type": "Attribute",
+                "value": {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "key",
+                  },
+                  "target": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "setting",
+                    },
+                    "type": "VariableExpression",
+                  },
+                  "type": "GetAttributeOperator",
+                },
+              },
+              {
+                "name": {
+                  "type": "Identifier",
+                  "value": "value",
+                },
+                "type": "Attribute",
+                "value": {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "value",
+                  },
+                  "target": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "setting",
+                    },
+                    "type": "VariableExpression",
+                  },
+                  "type": "GetAttributeOperator",
+                },
+              },
+            ],
+            "labels": [],
+            "type": "Block",
+          },
+        ],
+        "labels": [
+          {
+            "type": "StringLiteral",
+            "value": "setting",
+          },
+        ],
+        "type": "Block",
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_ecs_cluster",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "main",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-prod-alb",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "internal",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "BooleanLiteral",
+          "value": false,
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "load_balancer_type",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "application",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "security_groups",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "id",
+              },
+              "target": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "alb",
+                },
+                "target": {
+                  "name": {
+                    "type": "Identifier",
+                    "value": "aws_security_group",
+                  },
+                  "type": "VariableExpression",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "type": "GetAttributeOperator",
+            },
+          ],
+          "type": "TupleValue",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "subnets",
+        },
+        "type": "Attribute",
+        "value": {
+          "kind": "Full",
+          "operations": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "id",
+              },
+              "type": "GetAttributeOperator",
+            },
+          ],
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "public",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "aws_subnet",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "SplatOperator",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_lb",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "main",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "bucket",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-prod-assets",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_s3_bucket",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "assets",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "bucket",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "id",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "assets",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "aws_s3_bucket",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "versioning_configuration",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "status",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "Enabled",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+        ],
+        "labels": [],
+        "type": "Block",
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_s3_bucket_versioning",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "assets",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "/ecs/myapp-prod",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "retention_in_days",
+        },
+        "type": "Attribute",
+        "value": {
+          "type": "NumberLiteral",
+          "value": 30,
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_cloudwatch_log_group",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "app",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-prod-ecs-task-role",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "assume_role_policy",
+        },
+        "type": "Attribute",
+        "value": {
+          "args": [
+            {
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "Version",
+                  },
+                  "value": {
+                    "parts": [
+                      {
+                        "type": "TemplateLiteral",
+                        "value": "2012-10-17",
+                      },
+                    ],
+                    "type": "QuotedTemplateExpression",
+                  },
+                },
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "Statement",
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "elements": [
+                          {
+                            "key": {
+                              "type": "Identifier",
+                              "value": "Action",
+                            },
+                            "value": {
+                              "parts": [
+                                {
+                                  "type": "TemplateLiteral",
+                                  "value": "sts:AssumeRole",
+                                },
+                              ],
+                              "type": "QuotedTemplateExpression",
+                            },
+                          },
+                          {
+                            "key": {
+                              "type": "Identifier",
+                              "value": "Effect",
+                            },
+                            "value": {
+                              "parts": [
+                                {
+                                  "type": "TemplateLiteral",
+                                  "value": "Allow",
+                                },
+                              ],
+                              "type": "QuotedTemplateExpression",
+                            },
+                          },
+                          {
+                            "key": {
+                              "type": "Identifier",
+                              "value": "Principal",
+                            },
+                            "value": {
+                              "elements": [
+                                {
+                                  "key": {
+                                    "type": "Identifier",
+                                    "value": "Service",
+                                  },
+                                  "value": {
+                                    "parts": [
+                                      {
+                                        "type": "TemplateLiteral",
+                                        "value": "ecs-tasks.amazonaws.com",
+                                      },
+                                    ],
+                                    "type": "QuotedTemplateExpression",
+                                  },
+                                },
+                              ],
+                              "type": "ObjectValue",
+                            },
+                          },
+                        ],
+                        "type": "ObjectValue",
+                      },
+                    ],
+                    "type": "TupleValue",
+                  },
+                },
+              ],
+              "type": "ObjectValue",
+            },
+          ],
+          "name": {
+            "type": "Identifier",
+            "value": "jsonencode",
+          },
+          "type": "FunctionCallExpression",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_iam_role",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "ecs_task_role",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-ecs-task-policy",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "role",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "id",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "ecs_task_role",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "aws_iam_role",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "policy",
+        },
+        "type": "Attribute",
+        "value": {
+          "marker": {
+            "type": "Identifier",
+            "value": "POLICY",
+          },
+          "stripIndent": true,
+          "template": [
+            {
+              "type": "TemplateLiteral",
+              "value": 
+"		{
+			"Version": "2012-10-17",
+			"Statement": [
+				{
+					"Effect": "Allow",
+					"Action": [
+						"s3:GetObject",
+						"s3:PutObject"
+					],
+					"Resource": ""
+,
+            },
+            {
+              "expression": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "arn",
+                },
+                "target": {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "assets",
+                  },
+                  "target": {
+                    "name": {
+                      "type": "Identifier",
+                      "value": "aws_s3_bucket",
+                    },
+                    "type": "VariableExpression",
+                  },
+                  "type": "GetAttributeOperator",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "strip": {
+                "left": false,
+                "right": false,
+              },
+              "type": "TemplateInterpolation",
+            },
+            {
+              "type": "TemplateLiteral",
+              "value": 
+"/*"
+				}
+			]
+		}"
+,
+            },
+          ],
+          "type": "HeredocTemplateExpression",
+        },
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_iam_role_policy",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "ecs_task_policy",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "zone_id",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "ZONE_ID_PLACEHOLDER",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "app.example.com",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "type",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "A",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "alias",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "name",
+            },
+            "type": "Attribute",
+            "value": {
+              "key": {
+                "type": "Identifier",
+                "value": "dns_name",
+              },
+              "target": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "main",
+                },
+                "target": {
+                  "name": {
+                    "type": "Identifier",
+                    "value": "aws_lb",
+                  },
+                  "type": "VariableExpression",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "type": "GetAttributeOperator",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "zone_id",
+            },
+            "type": "Attribute",
+            "value": {
+              "key": {
+                "type": "Identifier",
+                "value": "zone_id",
+              },
+              "target": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "main",
+                },
+                "target": {
+                  "name": {
+                    "type": "Identifier",
+                    "value": "aws_lb",
+                  },
+                  "type": "VariableExpression",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "type": "GetAttributeOperator",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "evaluate_target_health",
+            },
+            "type": "Attribute",
+            "value": {
+              "type": "BooleanLiteral",
+              "value": true,
+            },
+          },
+        ],
+        "labels": [],
+        "type": "Block",
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_route53_record",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "app",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "resource",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "name_prefix",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-prod-app",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "vpc_id",
+        },
+        "type": "Attribute",
+        "value": {
+          "key": {
+            "type": "Identifier",
+            "value": "id",
+          },
+          "target": {
+            "key": {
+              "type": "Identifier",
+              "value": "main",
+            },
+            "target": {
+              "name": {
+                "type": "Identifier",
+                "value": "aws_vpc",
+              },
+              "type": "VariableExpression",
+            },
+            "type": "GetAttributeOperator",
+          },
+          "type": "GetAttributeOperator",
+        },
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "ingress",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "from_port",
+            },
+            "type": "Attribute",
+            "value": {
+              "type": "NumberLiteral",
+              "value": 80,
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "to_port",
+            },
+            "type": "Attribute",
+            "value": {
+              "type": "NumberLiteral",
+              "value": 80,
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "protocol",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "tcp",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "security_groups",
+            },
+            "type": "Attribute",
+            "value": {
+              "elements": [
+                {
+                  "key": {
+                    "type": "Identifier",
+                    "value": "id",
+                  },
+                  "target": {
+                    "key": {
+                      "type": "Identifier",
+                      "value": "alb",
+                    },
+                    "target": {
+                      "name": {
+                        "type": "Identifier",
+                        "value": "aws_security_group",
+                      },
+                      "type": "VariableExpression",
+                    },
+                    "type": "GetAttributeOperator",
+                  },
+                  "type": "GetAttributeOperator",
+                },
+              ],
+              "type": "TupleValue",
+            },
+          },
+        ],
+        "labels": [],
+        "type": "Block",
+      },
+      {
+        "blockType": {
+          "type": "Identifier",
+          "value": "egress",
+        },
+        "bodies": [
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "from_port",
+            },
+            "type": "Attribute",
+            "value": {
+              "type": "NumberLiteral",
+              "value": 0,
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "to_port",
+            },
+            "type": "Attribute",
+            "value": {
+              "type": "NumberLiteral",
+              "value": 0,
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "protocol",
+            },
+            "type": "Attribute",
+            "value": {
+              "parts": [
+                {
+                  "type": "TemplateLiteral",
+                  "value": "-1",
+                },
+              ],
+              "type": "QuotedTemplateExpression",
+            },
+          },
+          {
+            "name": {
+              "type": "Identifier",
+              "value": "cidr_blocks",
+            },
+            "type": "Attribute",
+            "value": {
+              "elements": [
+                {
+                  "parts": [
+                    {
+                      "type": "TemplateLiteral",
+                      "value": "0.0.0.0/0",
+                    },
+                  ],
+                  "type": "QuotedTemplateExpression",
+                },
+              ],
+              "type": "TupleValue",
+            },
+          },
+        ],
+        "labels": [],
+        "type": "Block",
+      },
+    ],
+    "labels": [
+      {
+        "type": "StringLiteral",
+        "value": "aws_security_group",
+      },
+      {
+        "type": "StringLiteral",
+        "value": "app",
+      },
+    ],
+    "type": "Block",
+  },
+  {
+    "blockType": {
+      "type": "Identifier",
+      "value": "locals",
+    },
+    "bodies": [
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "cluster_name",
+        },
+        "type": "Attribute",
+        "value": {
+          "parts": [
+            {
+              "type": "TemplateLiteral",
+              "value": "myapp-",
+            },
+            {
+              "expression": {
+                "key": {
+                  "type": "Identifier",
+                  "value": "environment",
+                },
+                "target": {
+                  "name": {
+                    "type": "Identifier",
+                    "value": "var",
+                  },
+                  "type": "VariableExpression",
+                },
+                "type": "GetAttributeOperator",
+              },
+              "strip": {
+                "left": false,
+                "right": false,
+              },
+              "type": "TemplateInterpolation",
+            },
+            {
+              "type": "TemplateLiteral",
+              "value": "-",
+            },
+            {
+              "expression": {
+                "args": [
+                  {
+                    "args": [],
+                    "name": {
+                      "type": "Identifier",
+                      "value": "timestamp",
+                    },
+                    "type": "FunctionCallExpression",
+                  },
+                ],
+                "name": {
+                  "type": "Identifier",
+                  "value": "md5",
+                },
+                "type": "FunctionCallExpression",
+              },
+              "strip": {
+                "left": false,
+                "right": false,
+              },
+              "type": "TemplateInterpolation",
+            },
+          ],
+          "type": "QuotedTemplateExpression",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "port_config",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "type": "NumberLiteral",
+              "value": 80,
+            },
+            {
+              "type": "NumberLiteral",
+              "value": 443,
+            },
+            {
+              "type": "NumberLiteral",
+              "value": 8080,
+            },
+          ],
+          "type": "TupleValue",
+        },
+      },
+      {
+        "name": {
+          "type": "Identifier",
+          "value": "app_config",
+        },
+        "type": "Attribute",
+        "value": {
+          "elements": [
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "is_enabled",
+              },
+              "value": {
+                "type": "BooleanLiteral",
+                "value": true,
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "count",
+              },
+              "value": {
+                "type": "NumberLiteral",
+                "value": 3,
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "name",
+              },
+              "value": {
+                "parts": [
+                  {
+                    "type": "TemplateLiteral",
+                    "value": "myapp",
+                  },
+                ],
+                "type": "QuotedTemplateExpression",
+              },
+            },
+            {
+              "key": {
+                "type": "Identifier",
+                "value": "settings",
+              },
+              "value": {
+                "elements": [
+                  {
+                    "key": {
+                      "type": "Identifier",
+                      "value": "timeout",
+                    },
+                    "value": {
+                      "type": "NumberLiteral",
+                      "value": 30,
+                    },
+                  },
+                  {
+                    "key": {
+                      "type": "Identifier",
+                      "value": "retries",
+                    },
+                    "value": {
+                      "type": "NumberLiteral",
+                      "value": 3,
+                    },
+                  },
+                  {
+                    "key": {
+                      "type": "Identifier",
+                      "value": "cache_enabled",
+                    },
+                    "value": {
+                      "type": "BooleanLiteral",
+                      "value": true,
+                    },
+                  },
+                ],
+                "type": "ObjectValue",
+              },
+            },
+          ],
+          "type": "ObjectValue",
+        },
+      },
+    ],
+    "labels": [],
+    "type": "Block",
+  },
+]
+`;

@@ -3,9 +3,9 @@ import { parse } from "./__generated";
 import { schema } from "./schema";
 
 describe("Smoke", () => {
-	test("parses a test tf file", async () => {
+	test("parses a test hcl file", async () => {
 		const template = await Bun.file(
-			new URL("./grammar.test.tf", import.meta.url),
+			new URL("./grammar.test.hcl", import.meta.url)
 		).text();
 		const parsed = parse(template);
 		expect(parsed).toBeObject();

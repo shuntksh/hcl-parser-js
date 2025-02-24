@@ -40,9 +40,6 @@ jobs:
       # Create Release and Upload Artifact ------------------------------------
       #
 
-      - name: Zip the dist folder
-        run: zip -r hcl-parser-js-${{ github.ref_name }}.zip dist/  # Consistent naming
-
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -57,13 +54,3 @@ jobs:
             Automated release for ${{ github.ref_name }}.
             - Built with Bun
             - Includes the `dist/` artifact
-
-      - name: Upload Release Artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}  # From create_release step
-          asset_path: .
-          asset_name: hcl-parser-js-${{ github.ref_name }}.zip
-          asset_content_type: application/zip
