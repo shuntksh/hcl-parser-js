@@ -8,8 +8,9 @@
 	"files": {
 		"ignoreUnknown": true,
 		"ignore": [
+			"__snapshots__",
 			"dist",
-			"./src/__generated.*"
+			"./src/__generated__.*"
 		]
 	},
 	"formatter": {

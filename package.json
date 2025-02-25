@@ -29,6 +29,7 @@
 		"build": "tsup --entry.index src/index.ts --entry.schema src/schema.ts --format esm,cjs --dts --minify",
 		"postbuild": "cp src/types.ts dist",
 		"lint": "biome check ./src",
+		"lint:ci": "biome ci ./src",
 		"format": "biome check --write ./src",
 		"test": "bun test",
 		"prepublishOnly": "bun run build"

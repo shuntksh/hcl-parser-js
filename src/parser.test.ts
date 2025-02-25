@@ -1,11 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { parse } from "./parser.js";
+import type { Attribute } from "./types.js";
 
 describe("parser", () => {
 	describe("operation orders", () => {
 		test("multiplicative operators have higher precedence than additive", () => {
 			const result = parse("x = 2 + 3 * 4");
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "BinaryOperator",
 				operator: "+",
@@ -21,7 +22,7 @@ describe("parser", () => {
 
 		test("additive operators have higher precedence than comparison", () => {
 			const result = parse("x = 5 > 2 + 3");
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "BinaryOperator",
 				operator: ">",
@@ -37,7 +38,7 @@ describe("parser", () => {
 
 		test("comparison operators have higher precedence than equality", () => {
 			const result = parse("x = 1 == 5 > 3");
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "BinaryOperator",
 				operator: "==",
@@ -53,7 +54,7 @@ describe("parser", () => {
 
 		test("equality operators have higher precedence than logical AND", () => {
 			const result = parse("x = true && 1 == 2");
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "BinaryOperator",
 				operator: "&&",
@@ -69,7 +70,7 @@ describe("parser", () => {
 
 		test("logical AND has higher precedence than logical OR", () => {
 			const result = parse("x = true || false && true");
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "BinaryOperator",
 				operator: "||",
@@ -85,7 +86,7 @@ describe("parser", () => {
 
 		test("parentheses override normal precedence", () => {
 			const result = parse("x = (2 + 3) * 4");
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "BinaryOperator",
 				operator: "*",
@@ -103,7 +104,7 @@ describe("parser", () => {
 	describe("template literals", () => {
 		test("handles string interpolation", () => {
 			const result = parse(`x = "Hello \${var.name}!"`);
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "QuotedTemplateExpression",
 				parts: [
@@ -123,8 +124,10 @@ describe("parser", () => {
 		});
 
 		test.skip("handles template directives", () => {
-			const result = parse(`x = "Items: %{for item in items}\${item}, %{endfor}"`);
-			const attr = result[0] as { type: string; name: any; value: any };
+			const result = parse(
+				`x = "Items: %{for item in items}\${item}, %{endfor}"`,
+			);
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "QuotedTemplateExpression",
 				parts: [
@@ -134,12 +137,18 @@ describe("parser", () => {
 						intro: {
 							key: { value: "item" },
 							value: null,
-							collection: { type: "VariableExpression", name: { value: "items" } },
+							collection: {
+								type: "VariableExpression",
+								name: { value: "items" },
+							},
 						},
 						body: [
 							{
 								type: "TemplateInterpolation",
-								expression: { type: "VariableExpression", name: { value: "item" } },
+								expression: {
+									type: "VariableExpression",
+									name: { value: "item" },
+								},
 								strip: { left: false, right: false },
 							},
 							{ type: "TemplateLiteral", value: ", " },
@@ -155,14 +164,17 @@ describe("parser", () => {
 
 		test("handles conditional directives", () => {
 			const result = parse(`x = "Status: %{if enabled}ON%{else}OFF%{endif}"`);
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "QuotedTemplateExpression",
 				parts: [
 					{ type: "TemplateLiteral", value: "Status: " },
 					{
 						type: "TemplateIf",
-						condition: { type: "VariableExpression", name: { value: "enabled" } },
+						condition: {
+							type: "VariableExpression",
+							name: { value: "enabled" },
+						},
 						then: [{ type: "TemplateLiteral", value: "ON" }],
 						else: [{ type: "TemplateLiteral", value: "OFF" }],
 						strip: {
@@ -185,7 +197,7 @@ describe("parser", () => {
 					%{endif}
 				%{endfor}"
 			`);
-			const attr = result[0] as { type: string; name: any; value: any };
+			const attr = result[0] as Attribute;
 			expect(attr.value).toMatchObject({
 				type: "QuotedTemplateExpression",
 				parts: [
@@ -195,7 +207,10 @@ describe("parser", () => {
 						intro: {
 							key: { value: "svc" },
 							value: null,
-							collection: { type: "VariableExpression", name: { value: "services" } },
+							collection: {
+								type: "VariableExpression",
+								name: { value: "services" },
+							},
 						},
 						body: [
 							{ type: "TemplateLiteral", value: "\n\t\t\t\t\tService " },
@@ -203,7 +218,10 @@ describe("parser", () => {
 								type: "TemplateInterpolation",
 								expression: {
 									type: "GetAttributeOperator",
-									target: { type: "VariableExpression", name: { value: "svc" } },
+									target: {
+										type: "VariableExpression",
+										name: { value: "svc" },
+									},
 									key: { value: "name" },
 								},
 							},
@@ -212,7 +230,10 @@ describe("parser", () => {
 								type: "TemplateIf",
 								condition: {
 									type: "GetAttributeOperator",
-									target: { type: "VariableExpression", name: { value: "svc" } },
+									target: {
+										type: "VariableExpression",
+										name: { value: "svc" },
+									},
 									key: { value: "enabled" },
 								},
 								then: [
@@ -221,12 +242,17 @@ describe("parser", () => {
 										type: "TemplateInterpolation",
 										expression: {
 											type: "GetAttributeOperator",
-											target: { type: "VariableExpression", name: { value: "svc" } },
+											target: {
+												type: "VariableExpression",
+												name: { value: "svc" },
+											},
 											key: { value: "port" },
 										},
 									},
 								],
-								else: [{ type: "TemplateLiteral", value: "\n\t\t\t\t\t\tDisabled" }],
+								else: [
+									{ type: "TemplateLiteral", value: "\n\t\t\t\t\t\tDisabled" },
+								],
 							},
 							{ type: "TemplateLiteral", value: "\n\t\t\t\t" },
 						],
