@@ -120,7 +120,6 @@ OneLineBlock
 		return { type: NodeTypes.OneLineBlock, blockType, labels, attribute }
 	}
 
-
 /**
  * Block creates a child body with type and optional labels
  * Block = Identifier labels { \n bodies \n }
@@ -129,9 +128,8 @@ Block
   = _ blockType:Identifier 
 		_ labels:(_labels)* 
     _ "{" 
-		_ NewLine
-    _ bodies:Bodies?
-    _ "}"
+      __ bodies:Bodies?
+    __ "}"
 		_ _terminator
 	{ return { type: NodeTypes.Block, blockType, labels, bodies } }
 
@@ -386,12 +384,10 @@ _endMarker = NewLine? _ end:Identifier &{ return heredocMarker === end.value } _
 HeredocTemplateContent
   = Template
 
-
 Template 
   = parts:(TemplateLiteral / TemplateInterpolation / TemplateDirective)* {
     return parts.flat()
-  }
-	
+  }	
 
 TemplateLiteral
   = chars:(!("${" / "%{" / _endMarker) .)+
@@ -480,7 +476,7 @@ TemplateFor
  * FunctionCall = Identifier "(" arguments ")";
  */
 FunctionCall
-	= name:Identifier _ "(" _ args:_function_args? _ ")" 
+	= name:Identifier _ "(" __ args:_function_args? __ ")" 
 	{ return { type: NodeTypes.FunctionCallExpression, name, args: args || [] } }
 
 /**
@@ -488,7 +484,7 @@ FunctionCall
  * arguments = (() || (Expression ("," Expression)* ("," | "...")?)
  */
 _function_args
-  = first:Expression rest:(_ "," _ expr:Expression { return expr })* _ ","?
+  = first:Expression rest:(__ "," __ expr:Expression { return expr })* __ ","?
     { return first ? [first, ...(rest || [])] : [] }
   / _ { return [] }
 

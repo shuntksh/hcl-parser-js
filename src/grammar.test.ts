@@ -1,16 +1,20 @@
 import { describe, expect, test } from "bun:test";
+import path from "node:path";
+
 import { parse } from "./__generated__";
+import { diff } from "./diff";
 import { schema } from "./schema";
+import { stringify } from "./stringify";
 
 describe("Smoke", () => {
-	test("parses a test hcl file", async () => {
+	test("parses a test tf file", async () => {
 		const template = await Bun.file(
-			new URL("./grammar.test.hcl", import.meta.url),
+			path.join(__dirname, "./grammar.test.hcl"),
 		).text();
-		const parsed = parse(template);
-		expect(parsed).toBeObject();
-		expect(parsed).toMatchSnapshot();
-		expect(schema.parse(parsed)).toEqual(parsed);
+		const ast = parse(template);
+		expect(ast).toBeObject();
+		expect(ast).toMatchSnapshot();
+		expect(schema.parse(ast)).toEqual(ast);
 	});
 
 	test("throws on invalid syntax", () => {

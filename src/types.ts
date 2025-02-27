@@ -44,9 +44,9 @@ export const NodeTypes = {
 
 export type NodeType = (typeof NodeTypes)[keyof typeof NodeTypes];
 
-export type ConfigFile = Body[];
+export type ConfigFile = ConfigBody[];
 
-export type Body = Attribute | Block | OneLineBlock;
+export type ConfigBody = Attribute | Block | OneLineBlock;
 
 export type Attribute = {
 	type: typeof NodeTypes.Attribute;
@@ -58,7 +58,7 @@ export type Block = {
 	type: typeof NodeTypes.Block;
 	blockType: Identifier;
 	labels: Label[];
-	bodies: Body[];
+	bodies: ConfigBody[];
 };
 
 export type OneLineBlock = {

@@ -1,247 +1,167 @@
 /*
- * This is a test file for the HCL parser as a sanity check or smoke test
- * It should be valid HCL2 and parse without throwing errors
- * It is not intended to be a comprehensive test of the parser (see tests/)
- * For parsed result, see __snapshots__/hcl-parser.test.ts.snap
+ * HCL Parser Test Cases
+ * Each block/section tests specific syntax features in focused, minimal examples
  */
 
-variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = "production"
+/* One Line Block */
+variable "online" { type = bool }
+
+variable "number_var" {  # Inline comment at end of line
+  type = number
+  default = 8080
 }
 
-variable "vpc_cidr" {
+#Inline_comment_without_space
+variable "tuple_var" {
+  type = list(string)
+  default = /*comment_without_space*/ ["item1", "item2", "item3"]
+}
+
+variable "string_var" {
   type    = string
-  default = "10.0.0.0/16"
+  default = "vpc-123456"
 }
 
-variable "db_config" {
-  type = object({
-    instance_class    = string
-    allocated_storage = number
-    multi_az          = bool
-    engine_version    = string
-  })
-  default = {
-    instance_class    = "db.t3.medium"
-    allocated_storage = 100
-    multi_az          = true
-    engine_version    = "13.7"
-  }
-}
-
-# List of availability zones
-variable "availability_zones" {
-  type    = list(string)
-  default = ["us-west-2a", "us-west-2b", "us-west-2c"]
-}
-
-# Map of environment-specific tags
-variable "environment_tags" {
+variable "dictionary_var" {
   type = map(string)
   default = {
-    Environment = "Production"
-    Terraform   = "true"
-    Project     = "MyApp"
+    Environment = "test"
+    Managed_by  = "terraform"
   }
 }
 
-terraform {
-  required_version = ">= 1.0.0"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.0"
-    }
-  }
-
-  backend "s3" {
-    bucket         = "terraform-state-prod"
-    key            = "terraform.tfstate"
-    region         = "us-west-2"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
-  }
+# Basic attribute types
+data "data" "basic_types" {
+  string_val = "simple string"
+  number_val = 42
+  bool_val   = true
+  null_val   = null
 }
 
-provider "aws" {
-  region = "us-west-2"
+# String interpolation and heredoc
+data "data" "string_expressions" {
+  # Simple interpolation
+  interpolated = "Hello, ${var.name}!"
+  
+  # Heredoc with interpolation
+  multiline = <<-EOT
+    Server: ${var.hostname}
+    Port: ${var.port}
+    Active: ${true}
+  EOT
 
-  default_tags {
-    tags = var.environment_tags
-  }
+  # Heredoc without indent stripping
+  raw_heredoc = <<EOT
+    Keep this indentation
+      exactly as is
+    EOT
 }
 
-# VPC Configuration
-resource "aws_vpc" "main" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
-  tags = {
-    Name = "main-vpc-${var.environment}"
-  }
+# Complex expressions and operators
+data "data" "expressions" {
+  # Conditional operator
+  conditional = var.environment == "prod" ? 5 : 1
+  
+  # Binary operators
+  arithmetic = (10 * 5) + (20 / 2)
+  comparison = 5 > 3 && 2 <= 4
+  
+  # Unary operators
+  negation = !false
+  negative = -42
 }
 
-# RDS Database
-resource "aws_db_instance" "main" {
-  identifier        = "myapp-${var.environment}-db"
-  engine            = "postgres"
-  engine_version    = var.db_config.engine_version
-  instance_class    = var.db_config.instance_class
-  allocated_storage = var.db_config.allocated_storage
-  storage_encrypted = true
-
-  db_name  = "myappdb"
-  username = "dbadmin"
-
-  # Using heredoc for complex string
-  password = <<-EOT
-		${base64encode("PLACEHOLDER_PASSWORD")}
-	EOT
-
-  backup_retention_period = 7
-  multi_az                = var.db_config.multi_az
-  skip_final_snapshot     = false
-
-  vpc_security_group_ids = [aws_security_group.db.id]
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-}
-
-# ECS Cluster with dynamic block example
-resource "aws_ecs_cluster" "main" {
-  name = local.cluster_name
-
-  dynamic "setting" {
-    for_each = {
-      containerInsights = "enabled"
-      capacityProviders = "FARGATE"
-    }
-
-    content {
-      name  = setting.key
-      value = setting.value
-    }
+# Collection types
+data "data" "collections" {
+  # Simple tuple
+  simple_list = ["a", "b", "c"]
+  
+  # Mixed type tuple
+  mixed_tuple = [1, "two", true]
+  
+  # Simple object
+  simple_map = {
+    key1 = "value1"
+    key2 = "value2"
   }
 }
 
-# Application Load Balancer
-resource "aws_lb" "main" {
-  name               = "myapp-prod-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb.id]
-  subnets            = aws_subnet.public[*].id
-}
-
-# S3 Bucket for Application Assets
-resource "aws_s3_bucket" "assets" {
-  bucket = "myapp-prod-assets"
-}
-
-resource "aws_s3_bucket_versioning" "assets" {
-  bucket = aws_s3_bucket.assets.id
-  versioning_configuration {
-    status = "Enabled"
+# For expressions
+locals {
+  # Tuple for expression
+  tuple_transform = [
+    for item in var.tuple_var:
+    upper(item)
+    if item != ""
+  ]
+  
+  # Object for expression
+  object_transform = {
+    for k, v in var.dictionary_var:
+    k => upper(v)
+    if v != null
   }
 }
 
-# CloudWatch Log Group
-resource "aws_cloudwatch_log_group" "app" {
-  name              = "/ecs/myapp-prod"
-  retention_in_days = 30
-}
+# Nested blocks with labels
+resource "aws_security_group" "test" {
+  # Multiple attributes
+  name        = "test-sg"
+  description = "Test security group"
+  vpc_id      = var.string_var
+  # Empty line
 
-# IAM Role for ECS Tasks
-resource "aws_iam_role" "ecs_task_role" {
-  name = "myapp-prod-ecs-task-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com"
-        }
-      }
-    ]
-  })
-}
 
-# Example of using heredoc for policy document
-resource "aws_iam_role_policy" "ecs_task_policy" {
-  name = "myapp-ecs-task-policy"
-  role = aws_iam_role.ecs_task_role.id
-
-  policy = <<-POLICY
-		{
-			"Version": "2012-10-17",
-			"Statement": [
-				{
-					"Effect": "Allow",
-					"Action": [
-						"s3:GetObject",
-						"s3:PutObject"
-					],
-					"Resource": "${aws_s3_bucket.assets.arn}/*"
-				}
-			]
-		}
-	POLICY
-}
-
-# Route53 DNS Records
-resource "aws_route53_record" "app" {
-  zone_id = "ZONE_ID_PLACEHOLDER"
-  name    = "app.example.com"
-  type    = "A"
-
-  alias {
-    name                   = aws_lb.main.dns_name
-    zone_id                = aws_lb.main.zone_id
-    evaluate_target_health = true
+  # Multiple nested blocks
+  ingress {
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
   }
-}
-
-# Security Group for Application
-resource "aws_security_group" "app" {
-  name_prefix = "myapp-prod-app"
-  vpc_id      = aws_vpc.main.id
 
   ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
   }
 }
 
-locals {
-  # Complex expression example
-  cluster_name = "myapp-${var.environment}-${md5(timestamp())}"
+# Dynamic blocks
+resource "aws_autoscaling_group" "test" {
+  name = "test-asg"
+  
+  min_size = 1
+  max_size = 10
 
-  # Tuple type example
-  port_config = [80, 443, 8080]
-
-  # Map with various types
-  app_config = {
-    is_enabled = true
-    count      = 3
-    name       = "myapp"
-    settings = {
-      timeout       = 30
-      retries       = 3
-      cache_enabled = true
+  dynamic "tag" {
+    for_each = var.dictionary_var
+    content {
+      key   = tag.key
+      value = tag.value
+      propagate_at_launch = true
     }
   }
+}
+
+# Function calls
+locals {
+  # Basic function calls
+  timestamp = timestamp()
+  upper     = upper("test")
+  
+  # Nested function calls
+  encoded = base64encode(jsonencode({
+    foo = "bar"
+    baz = 123
+  }))
+}
+
+# Splat expressions
+locals {
+  # Attribute splat
+  instance_ids = aws_instance.test.*.id
+  
+  # Full splat
+  public_ips = [for i in aws_instance.test: i.public_ip]
 }

@@ -5,18 +5,23 @@
 	"author": "Shun Takahashi",
 	"license": "MIT",
 	"packageManager": "bun@1.2.2",
+	"main": "./dist/mod.js",
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.js"
+			"types": "./dist/mod.d.ts",
+			"import": "./dist/mod.mjs",
+			"require": "./dist/mod.js"
 		},
 		"./schema": {
 			"types": "./dist/schema.d.ts",
 			"import": "./dist/schema.mjs",
 			"require": "./dist/schema.js"
 		},
-		"./types": "./dist/types.ts"
+		"./diff": {
+			"types": "./dist/diff.d.ts",
+			"import": "./dist/diff.mjs",
+			"require": "./dist/diff.js"
+		}
 	},
 	"files": [
 		"dist",
@@ -26,8 +31,7 @@
 	"scripts": {
 		"generate": "peggy -c peggy.config.cjs --test-file src/grammar.test.hcl > /dev/null",
 		"prebuild": "bun run generate",
-		"build": "tsup --entry.index src/index.ts --entry.schema src/schema.ts --format esm,cjs --dts --minify",
-		"postbuild": "cp src/types.ts dist",
+		"build": "tsup --entry.mod src/mod.ts --entry.schema src/schema.ts --entry.diff src/diff.ts --format esm,cjs --dts --minify",
 		"lint": "biome check ./src",
 		"lint:ci": "biome ci ./src",
 		"format": "biome check --write ./src",

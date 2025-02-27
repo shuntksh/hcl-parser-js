@@ -64,7 +64,7 @@ export const bodySchema = z.union([
 	attributeSchema,
 	blockSchema,
 	oneLineBlockSchema,
-]) satisfies SchemaTypeOf<Types.Body>;
+]) satisfies SchemaTypeOf<Types.ConfigBody>;
 
 export const stringLiteralSchema = z.object({
 	type: z.literal(NodeTypes.StringLiteral),
