@@ -570,29 +570,35 @@ exports[`Smoke parses a test tf file 1`] = `
         "type": "Attribute",
         "value": {
           "left": {
-            "left": {
-              "type": "NumberLiteral",
-              "value": 10,
+            "expression": {
+              "left": {
+                "type": "NumberLiteral",
+                "value": 10,
+              },
+              "operator": "*",
+              "right": {
+                "type": "NumberLiteral",
+                "value": 5,
+              },
+              "type": "BinaryOperator",
             },
-            "operator": "*",
-            "right": {
-              "type": "NumberLiteral",
-              "value": 5,
-            },
-            "type": "BinaryOperator",
+            "type": "ParenthesizedExpression",
           },
           "operator": "+",
           "right": {
-            "left": {
-              "type": "NumberLiteral",
-              "value": 20,
+            "expression": {
+              "left": {
+                "type": "NumberLiteral",
+                "value": 20,
+              },
+              "operator": "/",
+              "right": {
+                "type": "NumberLiteral",
+                "value": 2,
+              },
+              "type": "BinaryOperator",
             },
-            "operator": "/",
-            "right": {
-              "type": "NumberLiteral",
-              "value": 2,
-            },
-            "type": "BinaryOperator",
+            "type": "ParenthesizedExpression",
           },
           "type": "BinaryOperator",
         },
@@ -610,24 +616,27 @@ exports[`Smoke parses a test tf file 1`] = `
           },
           "operator": ">",
           "right": {
-            "left": {
-              "type": "NumberLiteral",
-              "value": 3,
-            },
-            "operator": "&&",
-            "right": {
+            "expression": {
               "left": {
                 "type": "NumberLiteral",
-                "value": 2,
+                "value": 3,
               },
-              "operator": "<=",
+              "operator": "&&",
               "right": {
-                "type": "NumberLiteral",
-                "value": 4,
+                "left": {
+                  "type": "NumberLiteral",
+                  "value": 2,
+                },
+                "operator": "<=",
+                "right": {
+                  "type": "NumberLiteral",
+                  "value": 4,
+                },
+                "type": "BinaryOperator",
               },
               "type": "BinaryOperator",
             },
-            "type": "BinaryOperator",
+            "type": "ParenthesizedExpression",
           },
           "type": "BinaryOperator",
         },
@@ -1469,4 +1478,95 @@ exports[`Smoke parses a test tf file 1`] = `
     "type": "Block",
   },
 ]
+`;
+
+exports[`Smoke parses a test tf file 2`] = `
+"variable "online" { type = bool }
+variable "number_var" {
+  type = number
+  default = 8080
+}
+variable "tuple_var" {
+  type = list(string)
+  default = ["item1", "item2", "item3"]
+}
+variable "string_var" {
+  type = string
+  default = "vpc-123456"
+}
+variable "dictionary_var" {
+  type = map(string)
+  default = { Environment = "test", Managed_by = "terraform" }
+}
+data "data" "basic_types" {
+  string_val = "simple string"
+  number_val = 42
+  bool_val = true
+  null_val = null
+}
+data "data" "string_expressions" {
+  interpolated = "Hello, \${var.name}!"
+  multiline = <<-EOT
+    Server: \${var.hostname}
+    Port: \${var.port}
+    Active: \${true}
+EOT
+  raw_heredoc = <<EOT
+    Keep this indentation
+      exactly as is
+EOT
+}
+data "data" "expressions" {
+  conditional = var.environment == "prod" ? 5 : 1
+  arithmetic = (10 * 5) + (20 / 2)
+  comparison = 5 > (3 && 2 <= 4)
+  negation = !false
+  negative = -42
+}
+data "data" "collections" {
+  simple_list = ["a", "b", "c"]
+  mixed_tuple = [1, "two", true]
+  simple_map = { key1 = "value1", key2 = "value2" }
+}
+locals {
+  tuple_transform = [for item in var.tuple_var: upper(item) if item != ""]
+  object_transform = {for k in var.dictionary_var: k => upper(v) if v != null}
+}
+resource "aws_security_group" "test" {
+  name = "test-sg"
+  description = "Test security group"
+  vpc_id = var.string_var
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+  }
+  ingress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+  }
+}
+resource "aws_autoscaling_group" "test" {
+  name = "test-asg"
+  min_size = 1
+  max_size = 10
+  dynamic "tag" {
+    for_each = var.dictionary_var
+    content {
+      key = tag.key
+      value = tag.value
+      propagate_at_launch = true
+    }
+  }
+}
+locals {
+  timestamp = timestamp()
+  upper = upper("test")
+  encoded = base64encode(jsonencode({ foo = "bar", baz = 123 }))
+}
+locals {
+  instance_ids = aws_instance.test.*.id
+  public_ips = [for i in aws_instance.test: i.public_ip]
+}"
 `;

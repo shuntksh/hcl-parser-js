@@ -15,6 +15,8 @@ describe("Smoke", () => {
 		expect(ast).toBeObject();
 		expect(ast).toMatchSnapshot();
 		expect(schema.parse(ast)).toEqual(ast);
+		expect(stringify(ast)).toMatchSnapshot();
+		expect(diff(ast, parse(stringify(ast)))).toEqual([]);
 	});
 
 	test("throws on invalid syntax", () => {

@@ -40,6 +40,7 @@ export const NodeTypes = {
 	TupleValue: "TupleValue",
 	UnaryOperator: "UnaryOperator",
 	VariableExpression: "VariableExpression",
+	ParenthesizedExpression: "ParenthesizedExpression",
 } as const;
 
 export type NodeType = (typeof NodeTypes)[keyof typeof NodeTypes];
@@ -79,7 +80,13 @@ export type Expression =
 	| IndexOperator
 	| LegacyIndexOperator
 	| GetAttributeOperator
-	| SplatOperator;
+	| SplatOperator
+	| ParenthesizedExpression;
+
+export type ParenthesizedExpression = {
+	type: typeof NodeTypes.ParenthesizedExpression;
+	expression: Expression;
+};
 
 export type Label = StringLiteral | Identifier;
 

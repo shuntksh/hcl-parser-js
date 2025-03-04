@@ -66,6 +66,7 @@
 		TupleValue: "TupleValue",
 		UnaryOperator: "UnaryOperator",
 		VariableExpression: "VariableExpression",
+		ParenthesizedExpression: "ParenthesizedExpression",
 	} 
 
 	const ForKinds = {
@@ -188,7 +189,7 @@ _expr_term
       / CollectionValue
       / VariableExpr
       / ForExpr
-      / "(" _ target:Expression _ ")" { return target }
+      / "(" _ expression:Expression _ ")" { return { type: NodeTypes.ParenthesizedExpression, expression } }
       )
     tail:(Index / GetAttr / Splat)* 
     { return tail.reduce((target, op) => ({ ...op, target }), head) }
@@ -451,14 +452,15 @@ TemplateIf
  */
 TemplateFor
   = "%{" strip_start:"~"? _ 
-    "for" _ key:Identifier _ ("," _ value:Identifier)? _ 
+    "for" _ key:Identifier _ v:("," _ value:Identifier { return value })? _ 
     "in" _ collection:Expression _ 
     strip_end:"~"? "}"
     body:Template
     "%{" strip_endfor_start:"~"? _ "endfor" _ strip_endfor_end:"~"? "}" {
+		
     return {
       type: NodeTypes.TemplateFor,
-      intro: { key, value, collection },
+      intro: { key, value: v || null, collection },
       body: body,
       strip: {
         for: { start: !!strip_start, end: !!strip_end },

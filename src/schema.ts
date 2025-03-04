@@ -28,8 +28,14 @@ export const expressionSchema: z.ZodType<Types.Expression> = z.lazy(() =>
 		legacyIndexOperatorSchema,
 		getAttributeOperatorSchema,
 		splatOperatorSchema,
+		parenthesizedExpressionSchema,
 	]),
 ) satisfies SchemaTypeOf<Types.Expression>;
+
+export const parenthesizedExpressionSchema = z.object({
+	type: z.literal(NodeTypes.ParenthesizedExpression),
+	expression: expressionSchema,
+}) satisfies SchemaTypeOf<Types.ParenthesizedExpression>;
 
 export const identifierSchema = z.object({
 	type: z.literal(NodeTypes.Identifier),

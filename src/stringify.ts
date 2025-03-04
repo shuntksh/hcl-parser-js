@@ -20,6 +20,7 @@ import type {
 	ObjectValue,
 	ObjectValueElement,
 	OneLineBlock,
+	ParenthesizedExpression,
 	QuotedTemplateExpression,
 	SplatOperator,
 	StringLiteral,
@@ -37,7 +38,9 @@ import { NodeTypes } from "./types";
 /**
  * Stringify a HCL AST to a hcl string
  */
-export const stringify = (ast: ConfigFile): string => marshalConfigFile(ast);
+export function stringify(ast: ConfigFile): string {
+	return marshalConfigFile(ast);
+}
 
 // Helper function to marshal a ConfigFile (top-level AST)
 function marshalConfigFile(configFile: ConfigFile): string {
@@ -160,6 +163,8 @@ function marshalExpression(expr: Expression | StringLiteral): string {
 			return marshalGetAttributeOperator(expr as GetAttributeOperator);
 		case NodeTypes.SplatOperator:
 			return marshalSplatOperator(expr as SplatOperator);
+		case NodeTypes.ParenthesizedExpression:
+			return marshalParenthesizedExpression(expr as ParenthesizedExpression);
 		default:
 			throw new Error(`Unknown expression type: ${exprType}`);
 	}
@@ -360,6 +365,7 @@ function marshalBinaryOperator(op: BinaryOperator): string {
 	if (op.left.type === NodeTypes.BinaryOperator) {
 		const leftOp = op.left as BinaryOperator;
 		const leftPrecedence = precedence[leftOp.operator] || 0;
+		// Only add parentheses if the left operator has lower precedence
 		if (leftPrecedence < currentPrecedence) {
 			left = `(${left})`;
 		}
@@ -370,11 +376,13 @@ function marshalBinaryOperator(op: BinaryOperator): string {
 	if (op.right.type === NodeTypes.BinaryOperator) {
 		const rightOp = op.right as BinaryOperator;
 		const rightPrecedence = precedence[rightOp.operator] || 0;
-		// For right-associative operators or equal precedence, we need parentheses
+		// Add parentheses if the right operator has lower or equal precedence
+		// (except for right-associative operators like && and ||)
 		if (
-			rightPrecedence <= currentPrecedence &&
-			op.operator !== "||" &&
-			op.operator !== "&&"
+			rightPrecedence < currentPrecedence ||
+			(rightPrecedence === currentPrecedence &&
+				op.operator !== "&&" &&
+				op.operator !== "||")
 		) {
 			right = `(${right})`;
 		}
@@ -441,6 +449,16 @@ function marshalSplatOperator(op: SplatOperator): string {
 	}
 
 	throw new Error(`Unknown splat operator kind: ${splatKind}`);
+}
+
+// Marshal a ParenthesizedExpression
+function marshalParenthesizedExpression(expr: ParenthesizedExpression): string {
+	// We need to ensure that the parentheses are preserved in the AST after the roundtrip.
+	// The parser needs to recognize this as a parenthesized expression, not just a regular expression.
+	const innerExpr = marshalExpression(expr.expression);
+
+	// Always add parentheses around the expression, regardless of precedence
+	return `(${innerExpr})`;
 }
 
 // Helper function to escape strings

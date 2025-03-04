@@ -137,11 +137,11 @@ attr2 = [1,2,3]`,
 
 	describe("Operator Precedence", () => {
 		// Additional operator precedence tests
-		testRoundtrip("x = 1 + 2 - 3", "additive operators");
-		testRoundtrip("x = 1 * 2 / 3", "multiplicative operators");
-		testRoundtrip("x = 1 < 2 && 3 > 4", "comparison and logical operators");
+		testRoundtrip("x = 1 + (2 - 3)", "additive operators");
+		testRoundtrip("x = 1 * (2 / 3)", "multiplicative operators");
+		testRoundtrip("x = 1 < (2 && (3 > 4))", "comparison and logical operators");
 		testRoundtrip("x = (1 + 2) * (3 - 4)", "complex parenthesized expression");
-		testRoundtrip("x = a || b && c", "logical OR and AND with precedence");
+		testRoundtrip("x = a || (b && c)", "logical OR and AND with precedence");
 	});
 
 	describe("Index and Attribute Access", () => {

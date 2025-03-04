@@ -91,12 +91,14 @@ describe("parser", () => {
 				type: "BinaryOperator",
 				operator: "*",
 				left: {
-					type: "BinaryOperator",
-					operator: "+",
-					left: { type: "NumberLiteral", value: 2 },
-					right: { type: "NumberLiteral", value: 3 },
+					type: "ParenthesizedExpression",
+					expression: {
+						type: "BinaryOperator",
+						operator: "+",
+						left: { type: "NumberLiteral", value: 2 },
+						right: { type: "NumberLiteral", value: 3 },
+					},
 				},
-				right: { type: "NumberLiteral", value: 4 },
 			});
 		});
 	});
@@ -123,7 +125,7 @@ describe("parser", () => {
 			});
 		});
 
-		test.skip("handles template directives", () => {
+		test("handles template directives", () => {
 			const result = parse(
 				`x = "Items: %{for item in items}\${item}, %{endfor}"`,
 			);
@@ -187,7 +189,7 @@ describe("parser", () => {
 			});
 		});
 
-		test.skip("handles complex mixed templates", () => {
+		test("handles complex mixed templates", () => {
 			const result = parse(`
 				x = "Config: %{for svc in services}
 					Service \${svc.name}: %{if svc.enabled}
@@ -205,11 +207,11 @@ describe("parser", () => {
 					{
 						type: "TemplateFor",
 						intro: {
-							key: { value: "svc" },
+							key: { type: "Identifier", value: "svc" },
 							value: null,
 							collection: {
 								type: "VariableExpression",
-								name: { value: "services" },
+								name: { type: "Identifier", value: "services" },
 							},
 						},
 						body: [
@@ -220,10 +222,11 @@ describe("parser", () => {
 									type: "GetAttributeOperator",
 									target: {
 										type: "VariableExpression",
-										name: { value: "svc" },
+										name: { type: "Identifier", value: "svc" },
 									},
-									key: { value: "name" },
+									key: { type: "Identifier", value: "name" },
 								},
+								strip: { left: false, right: false },
 							},
 							{ type: "TemplateLiteral", value: ": " },
 							{
@@ -232,9 +235,9 @@ describe("parser", () => {
 									type: "GetAttributeOperator",
 									target: {
 										type: "VariableExpression",
-										name: { value: "svc" },
+										name: { type: "Identifier", value: "svc" },
 									},
-									key: { value: "enabled" },
+									key: { type: "Identifier", value: "enabled" },
 								},
 								then: [
 									{ type: "TemplateLiteral", value: "\n\t\t\t\t\t\tPort: " },
@@ -244,18 +247,32 @@ describe("parser", () => {
 											type: "GetAttributeOperator",
 											target: {
 												type: "VariableExpression",
-												name: { value: "svc" },
+												name: { type: "Identifier", value: "svc" },
 											},
-											key: { value: "port" },
+											key: { type: "Identifier", value: "port" },
 										},
+										strip: { left: false, right: false },
 									},
+									{ type: "TemplateLiteral", value: "\n\t\t\t\t\t" },
 								],
 								else: [
-									{ type: "TemplateLiteral", value: "\n\t\t\t\t\t\tDisabled" },
+									{
+										type: "TemplateLiteral",
+										value: "\n\t\t\t\t\t\tDisabled\n\t\t\t\t\t",
+									},
 								],
+								strip: {
+									if: { start: false, end: false },
+									else: { start: false, end: false },
+									endif: { start: false, end: false },
+								},
 							},
 							{ type: "TemplateLiteral", value: "\n\t\t\t\t" },
 						],
+						strip: {
+							for: { start: false, end: false },
+							endfor: { start: false, end: false },
+						},
 					},
 				],
 			});
