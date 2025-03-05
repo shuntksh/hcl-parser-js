@@ -39,14 +39,14 @@
 		"prepublishOnly": "bun run build"
 	},
 	"optionalDependencies": {
-		"zod": "^3"
+		"zod": "^3.24.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@types/bun": "1.2.2",
+		"@types/bun": "1.2.4",
 		"peggy": "4.2.0",
-		"tsup": "^8.3.6",
-		"typescript": "5.7.3",
+		"tsup": "^8.4.0",
+		"typescript": "5.8.2",
 		"zod": "3.24.2"
 	}
 }
