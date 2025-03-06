@@ -71,6 +71,12 @@ const parsed = schema.parse(ast);
 
 See [`schema.ts`](./src/schema.ts) for the complete zod schema definition.
 
+## Roadmap
+
+- Parser to support variable and function validation and interpolation.
+- Parser to support template expansion.
+- Add Terraform grammar support.
+
 ## Credits
 
 The parser uses HashiCorp's [HCL Native Syntax Specification](https://github.com/hashicorp/hcl/blob/5c140ce1cb2007f7cce52769d8ee97aec5f1032c/hclsyntax/spec.md) as the base for the parser implementation. Which is published under the MPL-2.0 license.
