@@ -84,29 +84,6 @@ const ast = hcl.parse(hclCode);
 const parsed = schema.parse(ast);
 ```
 
-Here is the parsed AST:
-
-```json
-[
-  {
-    "type": "Attribute",
-    "name": {
-      "type": "Identifier",
-      "value": "attr"
-    },
-    "value": {
-      "type": "QuotedTemplateExpression",
-      "parts": [
-        {
-          "type": "TemplateLiteral",
-          "value": "value"
-        }
-      ]
-    }
-  }
-]
-```
-
 See [`schema.ts`](./src/schema.ts) for the complete zod schema definition.
 
 ## Roadmap
@@ -117,4 +94,6 @@ See [`schema.ts`](./src/schema.ts) for the complete zod schema definition.
 
 ## Credits
 
-The parser uses HashiCorp's [HCL Native Syntax Specification](https://github.com/hashicorp/hcl/blob/5c140ce1cb2007f7cce52769d8ee97aec5f1032c/hclsyntax/spec.md) as the base for the parser implementation. Which is published under the MPL-2.0 license.
+The project uses HashiCorp's [HCL Native Syntax Specification](https://github.com/hashicorp/hcl/blob/5c140ce1cb2007f7cce52769d8ee97aec5f1032c/hclsyntax/spec.md) as the base for the parser implementation. Which is published under the MPL-2.0 license.
+
+This project uses [peggy](https://peggyjs.org) as the parser generator. Peggy is the successor of [PEG.js](https://github.com/pegjs/pegjs).
