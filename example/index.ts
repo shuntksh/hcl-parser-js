@@ -8,3 +8,4 @@ const hclCode = `
 const result = hcl.parse(hclCode);
 const parsed = schema.parse(result);
 console.log(JSON.stringify(parsed, null, 2));
+console.log(hcl.stringify(parsed));

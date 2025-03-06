@@ -14,7 +14,17 @@ It aiming to "parse" HCL code, currently it does not evaluate the generated AST 
 bun install hcl-parser-js
 ```
 
-## Usage
+## Basic Usage
+
+### `hcl.parse(input: string): ConfigFile`
+
+Take hcl configuration as a string and return the parsed AST. Throw a ParseError if the input is not a valid HCL code. Note that the generated AST is a plain JavaScript object and does not provide any methods to evaluate the parsed code.
+
+###  `hcl.stringify(ast: ConfigFile): string`
+
+Take the parsed AST and return the HCL code as a string. The output does not preserve the original formatting and comments but it is a valid HCL code.
+
+### Example
 
 ```ts
 import { hcl } from "hcl-parser-js";
@@ -24,6 +34,10 @@ attr = "value"
 `;
 
 const ast = hcl.parse(hclCode);
+
+console.log(hcl.stringify(parsed));
+// Note that stringify does not preserve the original formatting and comments
+// -> attr = "value"
 ```
 The `ast` is an array of objects that represents the parsed HCL code.
 See [`types.ts`](./src/types.ts) for the complete type definition.
@@ -49,7 +63,7 @@ See [`types.ts`](./src/types.ts) for the complete type definition.
 ]
 ```
 
-## Zod Schema
+## Optional Zod Schema
 
 Zod schema for the parsed HCL AST is also provided. It can be used to validate the parsed AST to ensure that it is a valid HCL code. Zod is an optional dependency, so you need to install it separately.
 
@@ -62,11 +76,35 @@ import { hcl } from "hcl-parser-js";
 import { schema } from "hcl-parser-js/schema";
 
 const hclCode = `
+# Comment will be ignored
 attr = "value"
 `;
 
 const ast = hcl.parse(hclCode);
 const parsed = schema.parse(ast);
+```
+
+Here is the parsed AST:
+
+```json
+[
+  {
+    "type": "Attribute",
+    "name": {
+      "type": "Identifier",
+      "value": "attr"
+    },
+    "value": {
+      "type": "QuotedTemplateExpression",
+      "parts": [
+        {
+          "type": "TemplateLiteral",
+          "value": "value"
+        }
+      ]
+    }
+  }
+]
 ```
 
 See [`schema.ts`](./src/schema.ts) for the complete zod schema definition.
