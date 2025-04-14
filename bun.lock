@@ -4,15 +4,15 @@
     "": {
       "name": "hcl-js-parser",
       "devDependencies": {
-        "@biomejs/biome": "latest",
-        "@types/bun": "latest",
+        "@biomejs/biome": "1.9.4",
+        "@types/bun": "1.2.5",
         "hcl-parser-js": "link:hcl-parser-js",
-        "peggy": "latest",
-        "tsup": "latest",
-        "typescript": "latest",
+        "peggy": "4.2.0",
+        "tsup": "^8.4.0",
+        "typescript": "5.8.2",
       },
       "optionalDependencies": {
-        "zod": "latest",
+        "zod": "^3.24.2",
       },
     },
   },

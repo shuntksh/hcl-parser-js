@@ -1,10 +1,10 @@
 // src/tf/terraform.ts
 import type { Block, Expression } from "../types";
 import {
+	TerraformSemanticError,
 	extractAttributes,
 	extractNestedBlocks,
 	getLabelValue,
-	TerraformSemanticError,
 } from "./common";
 
 export class TerraformConfigBlock {

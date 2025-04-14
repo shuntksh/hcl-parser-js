@@ -1,11 +1,11 @@
 // src/tf/variable.ts
 import type { Block, Expression } from "../types";
 import {
+	TerraformSemanticError,
 	extractAttributes,
 	extractNestedBlocks,
 	getLabelValue,
 	getOptionalAttribute,
-	TerraformSemanticError,
 } from "./common";
 
 export class VariableBlock {

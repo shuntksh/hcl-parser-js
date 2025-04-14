@@ -2,11 +2,11 @@
 import type { Block, Expression } from "../types";
 import { NodeTypes } from "../types";
 import {
+	TerraformSemanticError,
 	extractAttributes,
 	extractNestedBlocks,
 	getLabelValue,
 	getOptionalAttribute,
-	TerraformSemanticError,
 } from "./common";
 
 export class ProviderBlock {

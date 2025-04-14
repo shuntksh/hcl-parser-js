@@ -1,12 +1,12 @@
 // src/tf/output.ts
 import type { Block, Expression } from "../types";
 import {
+	TerraformSemanticError,
 	extractAttributes,
 	extractNestedBlocks,
 	getLabelValue,
 	getOptionalAttribute,
 	getRequiredAttribute,
-	TerraformSemanticError,
 } from "./common";
 
 export class OutputBlock {

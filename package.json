@@ -29,7 +29,7 @@
 		"LICENSE"
 	],
 	"scripts": {
-		"generate": "peggy -c peggy.config.cjs --test-file src/grammar.test.hcl > /dev/null",
+		"generate": "peggy -c peggy.config.cjs --test-file src/__tests__/grammar.test.hcl > /dev/null",
 		"fetch-schema": "bun run scripts/tf-schema-fetcher.ts --file ./scripts/tf-provider-list.txt --out-dir ./.tf-schema",
 		"prebuild": "bun run generate",
 		"build": "tsup --entry.mod src/mod.ts --entry.schema src/schema.ts --entry.diff src/diff.ts --format esm,cjs --dts --minify",
