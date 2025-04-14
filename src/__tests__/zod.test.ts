@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { parse } from "./parser";
-import { schema } from "./schema";
+import { parse } from "../__generated__";
+import { schema } from "../zod";
 
 const parseAndValidate = (block: string) => {
 	const ast = parse(block);

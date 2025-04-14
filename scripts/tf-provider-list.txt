@@ -1,0 +1,7 @@
+# cspell:disable
+hashicorp/aws
+hashicorp/google
+hashicorp/azurerm
+hashicorp/kubernetes
+oracle/oci
+aliyun/alicloud

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { parse } from "./parser.js";
-import type { Attribute } from "./types.js";
+import { parse } from "../parser.js";
+import type { Attribute } from "../types.js";
 
 describe("parser", () => {
 	describe("operation orders", () => {

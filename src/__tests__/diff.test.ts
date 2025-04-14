@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { diff } from "./diff";
+import { diff } from "../diff";
 
 describe("diffObjects", () => {
 	test("returns empty array for identical objects", () => {

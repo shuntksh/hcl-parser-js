@@ -120,10 +120,7 @@ export const collectionValueSchema = z.union([
 
 export const quotedTemplateContentSchema = z.lazy(() =>
 	z.union([
-		z.object({
-			type: z.literal(NodeTypes.TemplateLiteral),
-			value: z.string(),
-		}),
+		templateLiteralSchema,
 		templateInterpolationSchema,
 		templateDirectiveSchema,
 	]),

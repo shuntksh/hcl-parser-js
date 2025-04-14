@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { parse } from "./parser";
-import { stringify } from "./stringify";
+import { parse } from "../parser";
+import { stringify } from "../stringify";
 
 describe("HCL Roundtrip Tests", () => {
 	/**

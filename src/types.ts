@@ -45,6 +45,24 @@ export const NodeTypes = {
 
 export type NodeType = (typeof NodeTypes)[keyof typeof NodeTypes];
 
+export type ParseError = {
+	message: string;
+	location: {
+		line: number;
+		column: number;
+	};
+};
+
+export type SafeParseResult<T> =
+	| {
+			success: true;
+			data: T;
+	  }
+	| {
+			success: false;
+			error: ParseError;
+	  };
+
 export type ConfigFile = ConfigBody[];
 
 export type ConfigBody = Attribute | Block | OneLineBlock;

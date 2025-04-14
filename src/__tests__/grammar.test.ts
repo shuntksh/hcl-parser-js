@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import path from "node:path";
 
-import { parse } from "./__generated__";
-import { diff } from "./diff";
-import { schema } from "./schema";
-import { stringify } from "./stringify";
+import { parse } from "../__generated__";
+import { diff } from "../diff";
+import { stringify } from "../stringify";
+import { schema } from "../zod";
 
 describe("Smoke", () => {
 	test("parses a test tf file", async () => {

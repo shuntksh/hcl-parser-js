@@ -201,9 +201,9 @@ export declare const parse: typeof ParseFunction;
 declare function ParseFunction<Options extends ParseOptions<"ConfigFile">>(
   input: string,
   options?: Options,
-): ConfigFile;
+): any;
 
 declare function ParseFunction<Options extends ParseOptions<StartRuleNames>>(
   input: string,
   options?: Options,
-): ConfigFile;
+): any;
