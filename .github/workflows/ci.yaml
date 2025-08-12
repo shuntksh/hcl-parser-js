@@ -22,7 +22,7 @@ jobs:
 
       # Checkout code - https://github.com/actions/checkout
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Install bun using the official action - https://github.com/oven-sh/setup-bun
       - name: Setup bun
